@@ -16,6 +16,9 @@
     <meta name="theme-color" content="#000000">
     <meta name="mobile-web-app-capable" content="yes">
     
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json">
+    
     <title>Tetris Turbo - Mobile Edition</title>
     
     <style>
@@ -874,7 +877,127 @@
                 }
             });
             
+            // Setup gesture recognition on game board
+            setupGestureRecognition();
+            
             console.log('Touch controls setup complete');
+        }
+        
+        // Advanced gesture recognition for game board
+        function setupGestureRecognition() {
+            const gameBoard = document.getElementById('gameBoard');
+            let touchStartTime = 0;
+            let touchStartPos = { x: 0, y: 0 };
+            let longPressTimer = null;
+            
+            gameBoard.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                touchStartTime = performance.now();
+                const touch = e.touches[0];
+                touchStartPos = { x: touch.clientX, y: touch.clientY };
+                
+                // Setup long press detection for pause
+                longPressTimer = setTimeout(() => {
+                    if (longPressTimer) {
+                        // Trigger haptic feedback if supported
+                        if ('vibrate' in navigator) {
+                            navigator.vibrate(100);
+                        }
+                        
+                        // Pause/unpause game
+                        gameRunning = !gameRunning;
+                        if (gameRunning) {
+                            gameLoop = requestAnimationFrame(gameUpdate);
+                        } else if (gameLoop) {
+                            cancelAnimationFrame(gameLoop);
+                            gameLoop = null;
+                        }
+                        console.log('Long press: Game ' + (gameRunning ? 'unpaused' : 'paused'));
+                        longPressTimer = null;
+                    }
+                }, 500);
+                
+            }, { passive: false });
+            
+            gameBoard.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                // Cancel long press if moving
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+            }, { passive: false });
+            
+            gameBoard.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                
+                // Cancel long press timer
+                if (longPressTimer) {
+                    clearTimeout(longPressTimer);
+                    longPressTimer = null;
+                }
+                
+                if (!gameRunning) return;
+                
+                const endTime = performance.now();
+                const duration = endTime - touchStartTime;
+                const touch = e.changedTouches[0];
+                const endPos = { x: touch.clientX, y: touch.clientY };
+                
+                const deltaX = endPos.x - touchStartPos.x;
+                const deltaY = endPos.y - touchStartPos.y;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                
+                // Quick tap = rotate
+                if (distance < 20 && duration < 200) {
+                    rotatePiece();
+                    console.log('Gesture: tap -> rotate');
+                    return;
+                }
+                
+                // Double tap = hard drop (handled separately)
+                // Swipe gestures
+                if (distance > 30) {
+                    const velocity = distance / duration;
+                    
+                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                        // Horizontal swipe
+                        if (deltaX > 0) {
+                            movePiece(1, 0); // Swipe right
+                            console.log('Gesture: swipe right');
+                        } else {
+                            movePiece(-1, 0); // Swipe left
+                            console.log('Gesture: swipe left');
+                        }
+                    } else if (deltaY > 0) {
+                        // Swipe down = soft drop or hard drop based on velocity
+                        if (velocity > 2) {
+                            hardDrop();
+                            console.log('Gesture: fast swipe down -> hard drop');
+                        } else {
+                            movePiece(0, 1);
+                            console.log('Gesture: swipe down -> soft drop');
+                        }
+                    }
+                }
+            }, { passive: false });
+            
+            // Double tap detection
+            let lastTapTime = 0;
+            gameBoard.addEventListener('touchstart', (e) => {
+                const now = performance.now();
+                if (now - lastTapTime < 300) {
+                    // Double tap detected
+                    e.preventDefault();
+                    if (gameRunning) {
+                        hardDrop();
+                        console.log('Gesture: double tap -> hard drop');
+                    }
+                }
+                lastTapTime = now;
+            }, { passive: false });
+            
+            console.log('Gesture recognition setup complete');
         }
         
 
@@ -890,8 +1013,55 @@
             }, 200);
         }
         
+        // PWA Service Worker Registration
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered successfully:', registration.scope);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    console.log('New service worker available, reloading...');
+                                    // Auto-reload for updates (in production, you might want to prompt user)
+                                    window.location.reload();
+                                }
+                            });
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+            }
+        }
+        
+        // PWA Install Prompt
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('PWA install prompt available');
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show custom install button (could be added to UI later)
+            if (isMobile) {
+                console.log('PWA: Ready for installation on mobile device');
+            }
+        });
+        
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('PWA: App was installed successfully');
+            deferredPrompt = null;
+        });
+        
         // Initialize the game when page loads
         window.addEventListener('load', function() {
+            // Register service worker first
+            registerServiceWorker();
+            
             initializeBoard();
             setupTouchControls();
             console.log('Game initialized successfully');
