@@ -320,6 +320,7 @@
         // Game state
         let score = 0;
         let level = 1;
+        let totalLinesCleared = 0; // Track total lines for level progression
         let gameRunning = false;
         let currentPiece = null;
         let nextPiece = null;
@@ -882,12 +883,15 @@
                     board.unshift(Array(BOARD_WIDTH).fill(null));
                 });
                 
-                // Update score
+                // Update score (keep original system)
                 const points = [0, 100, 300, 500, 800][completedLines.length] * level;
                 updateScore(score + points);
                 
-                // Check level progression
-                const newLevel = Math.floor(score / 1000) + 1;
+                // Update total lines cleared
+                totalLinesCleared += completedLines.length;
+                
+                // Level progression based on lines cleared (classic Tetris)
+                const newLevel = Math.floor(totalLinesCleared / 10) + 1;
                 if (newLevel !== level) {
                     updateLevel(newLevel);
                 }
@@ -916,6 +920,7 @@
             board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(null));
             score = 0;
             level = 1;
+            totalLinesCleared = 0;
             updateScore();
             updateLevel();
             
