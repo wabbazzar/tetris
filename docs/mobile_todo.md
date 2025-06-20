@@ -165,6 +165,7 @@ clean-mobile:
 - [ ] Create mobile-friendly game over screen
 - [ ] Add touch-specific collision feedback
 - [ ] Implement mobile performance monitoring
+- [ ] Level up flash animation optimized for mobile screens
 
 ### 3.4 Visual Feedback System
 - [ ] Create single addTouchFeedback() method
@@ -173,6 +174,8 @@ clean-mobile:
 - [ ] Add haptic feedback integration (where supported)
 - [ ] Create touch-specific animation tweaks
 - [ ] Implement mobile next piece preview (3x3 mini-grid)
+- [ ] Level up animation with mobile-responsive text sizing
+- [ ] Haptic double-pulse pattern for level advancement
 
 ## Phase 4: Progressive Web App (PWA) Features
 
@@ -321,6 +324,7 @@ clean-mobile:
 - [ ] High contrast for outdoor mobile usage
 - [ ] Readable typography at mobile sizes
 - [ ] Consistent visual feedback system
+- [ ] Level up animation with mobile-optimized text scaling
 - [ ] Touch-friendly sizing (44px minimum targets)
 - [ ] Safe area handling for notched devices
 

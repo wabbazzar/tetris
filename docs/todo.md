@@ -176,6 +176,7 @@ auto-test:
 - [ ] Implement smooth animations
 - [ ] Add retro-style fonts
 - [ ] Create game over animation
+- [ ] Level up flash animation with "LEVEL X" text display
 
 ## Phase 6: Performance & Final Testing
 
@@ -258,6 +259,7 @@ auto-test:
 - [ ] All pieces have distinct neon colors
 - [ ] Glow effects on all game elements
 - [ ] Smooth animations throughout
+- [ ] Level up flash animation with neon text
 - [ ] Clean, modern arcade appearance
 - [ ] Grid lines subtle but visible
 

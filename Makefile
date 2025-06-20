@@ -1,10 +1,19 @@
-.PHONY: serve play device-test clean-cache start help
+.PHONY: serve force-serve play device-test clean-cache start help
 
 # Mobile-ready development server
 serve:
 	@echo "Starting Tetris Turbo Mobile server on http://localhost:8000"
 	@echo "For mobile device testing, use your local IP address"
-	@python3 -m http.server 8000 --bind 0.0.0.0 || python -m SimpleHTTPServer 8000
+	@python3 -m http.server 8000 --bind 0.0.0.0 || python -m http.server 8000
+
+# Force start server (kills existing server first)
+force-serve:
+	@echo "Stopping any existing servers..."
+	@pkill -f "python.*http.server" || true
+	@sleep 1
+	@echo "Starting Tetris Turbo Mobile server on http://localhost:8000"
+	@echo "For mobile device testing, use your local IP address"
+	@python3 -m http.server 8000
 
 # Open Tetris Turbo (auto-detects mobile/desktop)
 play:
@@ -36,6 +45,7 @@ help:
 	@echo "Tetris Turbo Mobile Edition - Available commands:"
 	@echo ""
 	@echo "  make serve       - Start mobile-ready development server"
+	@echo "  make force-serve - Force start server (kills existing first)"
 	@echo "  make play        - Open Tetris Turbo (auto-detects mobile/desktop)"
 	@echo "  make device-test - Show mobile device connection info"
 	@echo "  make clean-cache - Cache clearing instructions"

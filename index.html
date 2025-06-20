@@ -244,6 +244,45 @@
                 opacity: 0;
             }
         }
+        
+        /* Level up flash animation */
+        @keyframes levelUpFlash {
+            0% {
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        
+        /* Level up text animation */
+        @keyframes levelUpText {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            20% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            40% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            80% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
     </style>
 </head>
 <body>
@@ -760,6 +799,58 @@
             }
         }
         
+        // Show level-up animation (subtle flash effect)
+        function showLevelUpAnimation() {
+            // Create animation overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'level-up-overlay';
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.background = 'radial-gradient(circle, rgba(0,255,255,0.2) 0%, rgba(0,255,255,0.05) 40%, transparent 70%)';
+            overlay.style.pointerEvents = 'none';
+            overlay.style.zIndex = '999';
+            overlay.style.opacity = '0';
+            overlay.style.animation = 'levelUpFlash 1.5s ease-out forwards';
+            
+            // Add level up text
+            const levelText = document.createElement('div');
+            levelText.className = 'level-up-text';
+            levelText.textContent = `LEVEL ${level}`;
+            levelText.style.position = 'absolute';
+            levelText.style.top = '50%';
+            levelText.style.left = '50%';
+            levelText.style.transform = 'translate(-50%, -50%)';
+            levelText.style.fontSize = isMobile ? '3rem' : '4rem';
+            levelText.style.fontWeight = 'bold';
+            levelText.style.color = '#00ffff';
+            levelText.style.textShadow = '0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff';
+            levelText.style.textAlign = 'center';
+            levelText.style.fontFamily = 'monospace';
+            levelText.style.letterSpacing = '0.2em';
+            levelText.style.opacity = '0';
+            levelText.style.animation = 'levelUpText 1.5s ease-out forwards';
+            
+            overlay.appendChild(levelText);
+            document.body.appendChild(overlay);
+            
+            // Trigger haptic feedback if supported
+            if ('vibrate' in navigator) {
+                navigator.vibrate([100, 50, 100]);
+            }
+            
+            // Remove overlay after animation
+            setTimeout(() => {
+                if (overlay.parentNode) {
+                    overlay.parentNode.removeChild(overlay);
+                }
+            }, 1500);
+            
+            console.log(`Level up animation: Level ${level}`);
+        }
+        
         // Single method for moving pieces (following testing requirements)
         function movePiece(dx, dy) {
             if (!currentPiece || !gameRunning) return false;
@@ -894,6 +985,7 @@
                 const newLevel = Math.floor(totalLinesCleared / 10) + 1;
                 if (newLevel !== level) {
                     updateLevel(newLevel);
+                    showLevelUpAnimation();
                 }
                 
                 // Re-render board after line clear

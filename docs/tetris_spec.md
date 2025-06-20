@@ -69,6 +69,7 @@ Build a fully functional Tetris game that runs locally in a browser with modern 
 - **Glowing Effects:** All game pieces should have CSS glow/shadow effects
 - **Grid Lines:** Subtle glowing grid pattern on game board
 - **Line Clear Explosions:** Animated neon "explosion" effect when lines are cleared
+- **Level Up Animation:** Subtle cyan flash effect with "LEVEL X" text when advancing levels
 - **Background Grid:** Subtle Tron-style background grid pattern
 - **Neon Text:** Score and level display in glowing, retro-style font
 - **Piece Differentiation:** Use gradients on blocks to distinguish adjacent same-colored pieces
@@ -95,6 +96,7 @@ Build a fully functional Tetris game that runs locally in a browser with modern 
 3. Grid line styling
 4. Neon score/level text
 5. Next piece preview with mini-grid
+6. Level up flash animation with text
 
 ### Nice-to-Have (Enhanced Effects)
 1. Line-clearing explosion animations
