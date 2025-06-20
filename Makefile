@@ -9,12 +9,12 @@ serve:
 # Open Tetris Turbo (auto-detects mobile/desktop)
 play:
 	@echo "Opening Tetris Turbo..."
-	@open http://localhost:8000/tetris.html || xdg-open http://localhost:8000/tetris.html
+	@open http://localhost:8000/ || xdg-open http://localhost:8000/
 
 # Mobile device testing info
 device-test:
 	@echo "Connect mobile device and navigate to:"
-	@echo "http://$(shell hostname -I | awk '{print $$1}' 2>/dev/null || ifconfig | grep 'inet ' | grep -v 127.0.0.1 | head -1 | awk '{print $$2}' | sed 's/addr://' || echo 'localhost'):8000/tetris.html"
+	@echo "http://$(shell ifconfig | grep 'inet ' | grep -v 127.0.0.1 | head -1 | awk '{print $$2}' || echo 'localhost'):8000/"
 	@echo ""
 	@echo "Mobile features:"
 	@echo "  • Touch controls + gesture recognition"
