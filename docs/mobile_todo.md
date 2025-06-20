@@ -72,6 +72,7 @@ clean-mobile:
 - [ ] Implement touch-action CSS to prevent defaults
 - [ ] Add semantic markup for screen readers
 - [ ] Create mobile-specific control overlay
+- [ ] Add next piece preview area in mobile header
 
 ### 1.3 Mobile-First CSS Implementation
 - [ ] Implement mobile breakpoint strategy (320px-428px)
@@ -85,52 +86,64 @@ clean-mobile:
 - [ ] Test on iPhone Pro Max (428px) viewport
 - [ ] Verify game board aspect ratio maintenance
 - [ ] Test score/level display positioning
+- [ ] Test next piece preview fits in header area
 - [ ] Verify visual hierarchy on small screens
 
-## Phase 2: Touch Event System & Gesture Recognition
+## Phase 2: Touch Event System & Zone-Based Controls
 
 ### 2.1 Visual Tests First
-- [ ] Test touch coordinate capture accuracy
-- [ ] Test swipe gesture recognition (left/right/down)
-- [ ] Test tap and double-tap detection
-- [ ] Test long press (500ms) recognition
-- [ ] Verify touch feedback visual indicators
+- [ ] Test touch zone detection accuracy (grid vs left/right zones)
+- [ ] Test tap vs double-tap recognition within grid
+- [ ] Test left/right zone tap responsiveness
+- [ ] Test long press (500ms) recognition anywhere on screen
+- [ ] Verify touch zone visual feedback indicators
 
-### 2.2 Core Touch Event Handler
-- [ ] Create single handleTouch() method for all touch events
-- [ ] Implement gesture recognition algorithms
-- [ ] Add touch coordinate tracking and validation
-- [ ] Create debounced gesture processing
-- [ ] Add multi-touch prevention system
+### 2.2 Core Touch Zone Handler
+- [ ] Create single handleTouchZones() method for all zone-based touch events
+- [ ] Implement zone detection algorithms (grid, left, right, bottom)
+- [ ] Add touch coordinate tracking and zone mapping
+- [ ] Create debounced tap processing with double-tap detection
+- [ ] Add visual feedback system for each touch zone
 
-### 2.3 Gesture Implementation
-- [ ] **Horizontal Swipe**: Implement left/right piece movement
-  - Minimum 30px swipe distance
-  - Velocity threshold detection
-  - Visual swipe trail feedback
-- [ ] **Vertical Swipe Down**: Implement soft drop
-  - Continuous drop while finger held
-  - Smooth acceleration curve
-  - Visual drop indicator
-- [ ] **Single Tap**: Implement piece rotation
-  - Quick tap recognition (< 200ms)
-  - Visual rotation feedback
-  - Prevent accidental double-taps
-- [ ] **Double Tap**: Implement hard drop
-  - Rapid double-tap detection (< 300ms)
-  - Instant drop with trail effect
+### 2.3 Zone-Based Control Implementation
+- [ ] **Grid Tap**: Implement piece rotation
+  - Single tap anywhere within game board boundaries
+  - 250ms delay to differentiate from double-tap
+  - Visual rotation feedback with piece preview
+  - Prevent rotation during double-tap sequence
+- [ ] **Grid Double-Tap**: Implement hard drop
+  - Rapid double-tap detection within game board (< 250ms)
+  - Instant drop with visual trail effect
+  - Cancel single-tap timer when double-tap detected
   - Visual confirmation animation
-- [ ] **Long Press**: Implement pause/unpause
-  - 500ms press duration
+- [ ] **Left Zone Tap**: Implement left movement
+  - Detect taps in area left of game board
+  - Immediate piece movement left
+  - Visual left arrow feedback in zone
+  - Comfortable thumb-reachable area sizing
+- [ ] **Right Zone Tap**: Implement right movement
+  - Detect taps in area right of game board
+  - Immediate piece movement right
+  - Visual right arrow feedback in zone
+  - Comfortable thumb-reachable area sizing
+- [ ] **Long Press (General)**: Implement pause/unpause (non-bottom zones)
+  - 500ms press duration detection in non-bottom areas
   - Haptic feedback where supported
-  - Visual press indicator
+  - Visual pause indicator overlay
+- [ ] **Bottom Zone Long Press**: Implement hard drop
+  - 500ms press duration in bottom zone below game board
+  - Immediate hard drop activation with visual trail
+  - Distinct from pause functionality
+  - Visual downward double-arrow feedback
 
-### 2.4 Touch Performance Optimization
-- [ ] Use passive event listeners for scroll prevention
-- [ ] Implement touch event pooling for performance
-- [ ] Add requestAnimationFrame for touch updates
-- [ ] Optimize gesture recognition algorithms
-- [ ] Test 60 FPS maintenance during touch interaction
+### 2.4 Touch Zone Visual Feedback
+- [ ] Create zone boundary indicators (subtle visual guides)
+- [ ] Add touch feedback animations for each zone
+- [ ] Implement visual arrow indicators for left/right zones
+- [ ] Add grid tap glow effect for rotation feedback
+- [ ] Create double-tap trail effect for hard drop
+- [ ] Add bottom zone long press feedback (double down arrows ⬇⬇)
+- [ ] Add zone highlighting on touch (temporary visual feedback)
 
 ## Phase 3: Mobile Game Logic Integration
 
@@ -161,6 +174,7 @@ clean-mobile:
 - [ ] Implement gesture trail visualization
 - [ ] Add haptic feedback integration (where supported)
 - [ ] Create touch-specific animation tweaks
+- [ ] Implement mobile next piece preview (3x3 mini-grid)
 
 ## Phase 4: Progressive Web App (PWA) Features
 

@@ -40,15 +40,24 @@
             position: fixed;
             width: 100%;
             height: 100vh;
+            height: 100dvh; /* Dynamic viewport height for mobile */
             touch-action: manipulation;
+            /* Safe area handling for iPhone */
+            padding-bottom: env(safe-area-inset-bottom);
         }
         
         .game-container {
             display: flex;
             flex-direction: column;
             height: 100vh;
+            height: 100dvh; /* Dynamic viewport height for mobile */
             padding: 10px;
-            gap: 10px;
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
+            gap: 8px;
+            box-sizing: border-box;
+            overflow: hidden; /* Prevent scrolling and cutoff */
+            width: 100%;
+            position: relative;
         }
         
         .game-header {
@@ -61,6 +70,66 @@
             border: 1px solid rgba(0, 255, 255, 0.3);
         }
         
+        .score-level-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .mobile-next-piece {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .next-piece-label-mobile {
+            color: #00ffff;
+            font-size: 10px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #00ffff;
+        }
+        
+        .next-piece-preview-mobile {
+            width: 45px;
+            height: 45px;
+            position: relative;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .next-piece-container {
+            margin-top: 20px;
+        }
+        
+        .next-piece-label {
+            color: #00ffff;
+            font-size: 14px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ffff;
+            margin-bottom: 8px;
+        }
+        
+        .next-piece-preview {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .preview-cell {
+            position: absolute;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .preview-cell.filled {
+            border: 1px solid currentColor;
+            box-shadow: 0 0 3px currentColor;
+        }
+        
         .game-board {
             flex: 1;
             max-width: 100%;
@@ -71,19 +140,11 @@
             position: relative;
             overflow: hidden;
             background: rgba(0, 0, 0, 0.8);
+            box-sizing: border-box;
+            min-height: 0; /* Allow proper shrinking */
         }
         
-        .touch-controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            gap: 8px;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.9);
-            border-radius: 8px;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            height: 120px;
-        }
+
         
         .game-info {
             display: none; /* Hidden on mobile, moved to header */
@@ -103,42 +164,7 @@
             font-weight: bold;
         }
         
-        .touch-button {
-            background: rgba(0, 255, 255, 0.2);
-            border: 2px solid #00ffff;
-            border-radius: 8px;
-            color: #00ffff;
-            font-family: inherit;
-            font-size: clamp(12px, 3vw, 16px);
-            font-weight: bold;
-            text-shadow: 0 0 5px #00ffff;
-            cursor: pointer;
-            touch-action: manipulation;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 44px;
-            transition: all 0.1s ease;
-        }
-        
-        .touch-button:active {
-            background: rgba(0, 255, 255, 0.4);
-            box-shadow: 0 0 10px #00ffff;
-            transform: scale(0.95);
-        }
-        
-        .touch-button.primary {
-            background: rgba(0, 255, 0, 0.2);
-            border-color: #00ff00;
-            color: #00ff00;
-            text-shadow: 0 0 5px #00ff00;
-        }
-        
-        .touch-button.primary:active {
-            background: rgba(0, 255, 0, 0.4);
-            box-shadow: 0 0 10px #00ff00;
-        }
+
         
         .version-info {
             position: fixed;
@@ -186,9 +212,7 @@
                 min-width: 200px;
             }
             
-            .touch-controls {
-                display: none;
-            }
+
             
             .score-display,
             .level-display {
@@ -204,17 +228,43 @@
         .blue { color: #0099ff; background: rgba(0, 153, 255, 0.3); }
         .yellow { color: #ffff00; background: rgba(255, 255, 0, 0.3); }
         .purple { color: #9900ff; background: rgba(153, 0, 255, 0.3); }
+        
+        /* Zone feedback animation */
+        @keyframes zoneFeedback {
+            0% {
+                transform: scale(0.5);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <!-- Mobile header with score/level -->
+        <!-- Mobile header with score/level and next piece -->
         <div class="game-header">
-            <div class="score-display">
-                SCORE: <span id="score">0</span>
+            <div class="score-level-container">
+                <div class="score-display">
+                    SCORE: <span id="score">0</span>
+                </div>
+                <div class="level-display">
+                    LEVEL: <span id="level">1</span>
+                </div>
             </div>
-            <div class="level-display">
-                LEVEL: <span id="level">1</span>
+            
+            <!-- Next piece preview for mobile -->
+            <div class="mobile-next-piece">
+                <div class="next-piece-label-mobile">NEXT</div>
+                <div class="next-piece-preview-mobile" id="nextPiecePreviewMobile">
+                    <!-- 3x3 mini-grid for next piece -->
+                </div>
             </div>
         </div>
         
@@ -223,15 +273,7 @@
             <!-- Grid cells will be generated here -->
         </div>
         
-        <!-- Touch controls for mobile -->
-        <div class="touch-controls">
-            <button class="touch-button" id="btnLeft">◀</button>
-            <button class="touch-button" id="btnRotate">↻</button>
-            <button class="touch-button" id="btnRight">▶</button>
-            <button class="touch-button primary" id="btnDrop">⬇</button>
-            <button class="touch-button" id="btnPause">⏸</button>
-            <button class="touch-button" id="btnRestart">↻</button>
-        </div>
+
         
         <!-- Desktop info panel (hidden on mobile) -->
         <div class="game-info">
@@ -241,6 +283,15 @@
             <div class="level-display">
                 LEVEL: <span id="levelDesktop">1</span>
             </div>
+            
+            <!-- Next piece preview for desktop -->
+            <div class="next-piece-container">
+                <div class="next-piece-label">NEXT:</div>
+                <div class="next-piece-preview" id="nextPiecePreview">
+                    <!-- 4x4 mini-grid for next piece -->
+                </div>
+            </div>
+            
             <div class="controls" style="color: #666; font-size: 12px; margin-top: 20px;">
                 <div>CONTROLS:</div>
                 <div>← → ↓ ↑ : Move/Rotate</div>
@@ -354,19 +405,43 @@
             // Calculate responsive cell size for mobile
             if (isMobile) {
                 const gameBoard = document.getElementById('gameBoard');
-                const containerWidth = window.innerWidth - 40; // Account for padding
-                const containerHeight = window.innerHeight - 200; // Account for header/controls
                 
-                const cellSizeByWidth = Math.floor(containerWidth / BOARD_WIDTH);
-                const cellSizeByHeight = Math.floor(containerHeight / BOARD_HEIGHT);
+                // More precise mobile dimension calculation
+                const containerPadding = 20; // Total horizontal padding (10px each side)
+                const availableWidth = window.innerWidth - containerPadding;
+                const headerHeight = 80; // Header space
+                const versionInfoHeight = 20; // Version info at bottom
+                const safeAreaBottom = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom') || '0');
+                const totalVerticalPadding = 20; // Container padding
                 
-                CELL_SIZE = Math.min(cellSizeByWidth, cellSizeByHeight, 35); // Max 35px on mobile
+                const availableHeight = window.innerHeight - headerHeight - versionInfoHeight - safeAreaBottom - totalVerticalPadding;
                 
-                // Update game board size
-                gameBoard.style.width = (BOARD_WIDTH * CELL_SIZE) + 'px';
-                gameBoard.style.height = (BOARD_HEIGHT * CELL_SIZE) + 'px';
+                // Calculate cell sizes more precisely
+                const cellSizeByWidth = Math.floor(availableWidth / BOARD_WIDTH);
+                const cellSizeByHeight = Math.floor(availableHeight / BOARD_HEIGHT);
                 
-                console.log('Mobile mode: Cell size =', CELL_SIZE + 'px');
+                // Use the larger possible size to maximize grid utilization
+                CELL_SIZE = Math.min(cellSizeByWidth, cellSizeByHeight, 35); // Increased max size
+                
+                // Calculate actual board dimensions
+                const boardWidth = BOARD_WIDTH * CELL_SIZE;
+                const boardHeight = BOARD_HEIGHT * CELL_SIZE;
+                
+                // Center the board horizontally if there's extra space
+                const leftMargin = Math.floor((availableWidth - boardWidth) / 2);
+                
+                // Update game board size and position
+                gameBoard.style.width = boardWidth + 'px';
+                gameBoard.style.height = boardHeight + 'px';
+                gameBoard.style.marginLeft = leftMargin + 'px';
+                gameBoard.style.marginRight = leftMargin + 'px';
+                
+                console.log('Mobile layout optimized:');
+                console.log('- Screen size:', window.innerWidth + 'x' + window.innerHeight);
+                console.log('- Available space:', availableWidth + 'x' + availableHeight);
+                console.log('- Cell size:', CELL_SIZE + 'px');
+                console.log('- Board size:', boardWidth + 'x' + boardHeight);
+                console.log('- Horizontal margins:', leftMargin + 'px');
             }
             
             return isMobile;
@@ -412,8 +487,112 @@
                 }
             }
             
+            // Initialize next piece preview grids
+            initializeNextPiecePreview();
+            
             console.log('Game board initialized with', BOARD_WIDTH * BOARD_HEIGHT, 'cells');
             console.log('Mobile mode:', isMobile, '| Cell size:', CELL_SIZE + 'px');
+        }
+        
+        // Initialize next piece preview grids
+        function initializeNextPiecePreview() {
+            // Desktop preview (4x4 grid)
+            const desktopPreview = document.getElementById('nextPiecePreview');
+            if (desktopPreview) {
+                desktopPreview.innerHTML = '';
+                for (let row = 0; row < 4; row++) {
+                    for (let col = 0; col < 4; col++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'preview-cell';
+                        cell.id = `preview-${row}-${col}`;
+                        cell.style.left = (col * 20) + 'px';
+                        cell.style.top = (row * 20) + 'px';
+                        cell.style.width = '20px';
+                        cell.style.height = '20px';
+                        desktopPreview.appendChild(cell);
+                    }
+                }
+            }
+            
+            // Mobile preview (3x3 grid)
+            const mobilePreview = document.getElementById('nextPiecePreviewMobile');
+            if (mobilePreview) {
+                mobilePreview.innerHTML = '';
+                for (let row = 0; row < 3; row++) {
+                    for (let col = 0; col < 3; col++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'preview-cell';
+                        cell.id = `preview-mobile-${row}-${col}`;
+                        cell.style.left = (col * 15) + 'px';
+                        cell.style.top = (row * 15) + 'px';
+                        cell.style.width = '15px';
+                        cell.style.height = '15px';
+                        mobilePreview.appendChild(cell);
+                    }
+                }
+            }
+        }
+        
+        // Update next piece preview
+        function updateNextPiecePreview() {
+            if (!nextPiece) return;
+            
+            // Clear both previews
+            for (let row = 0; row < 4; row++) {
+                for (let col = 0; col < 4; col++) {
+                    const desktopCell = document.getElementById(`preview-${row}-${col}`);
+                    if (desktopCell) {
+                        desktopCell.className = 'preview-cell';
+                        desktopCell.style.background = '';
+                    }
+                }
+            }
+            
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 3; col++) {
+                    const mobileCell = document.getElementById(`preview-mobile-${row}-${col}`);
+                    if (mobileCell) {
+                        mobileCell.className = 'preview-cell';
+                        mobileCell.style.background = '';
+                    }
+                }
+            }
+            
+            // Draw next piece in both previews
+            const shape = PIECES[nextPiece.type].rotations[0];
+            const color = PIECES[nextPiece.type].color;
+            
+            // Calculate centering offset
+            const desktopOffsetX = Math.floor((4 - shape[0].length) / 2);
+            const desktopOffsetY = Math.floor((4 - shape.length) / 2);
+            const mobileOffsetX = Math.floor((3 - shape[0].length) / 2);
+            const mobileOffsetY = Math.floor((3 - shape.length) / 2);
+            
+            for (let row = 0; row < shape.length; row++) {
+                for (let col = 0; col < shape[row].length; col++) {
+                    if (shape[row][col]) {
+                        // Desktop preview
+                        const desktopRow = row + desktopOffsetY;
+                        const desktopCol = col + desktopOffsetX;
+                        if (desktopRow >= 0 && desktopRow < 4 && desktopCol >= 0 && desktopCol < 4) {
+                            const desktopCell = document.getElementById(`preview-${desktopRow}-${desktopCol}`);
+                            if (desktopCell) {
+                                desktopCell.className = `preview-cell filled ${color}`;
+                            }
+                        }
+                        
+                        // Mobile preview (only if fits in 3x3)
+                        const mobileRow = row + mobileOffsetY;
+                        const mobileCol = col + mobileOffsetX;
+                        if (mobileRow >= 0 && mobileRow < 3 && mobileCol >= 0 && mobileCol < 3) {
+                            const mobileCell = document.getElementById(`preview-mobile-${mobileRow}-${mobileCol}`);
+                            if (mobileCell) {
+                                mobileCell.className = `preview-cell filled ${color}`;
+                            }
+                        }
+                    }
+                }
+            }
         }
         
         // Single method for updating cells (following testing requirements)
@@ -674,6 +853,9 @@
             currentPiece = nextPiece || createPiece();
             nextPiece = createPiece();
             
+            // Update next piece preview
+            updateNextPiecePreview();
+            
             // Check game over
             if (!canPlacePiece(currentPiece, currentPiece.x, currentPiece.y)) {
                 gameOver();
@@ -740,6 +922,9 @@
             // Create first pieces
             currentPiece = createPiece();
             nextPiece = createPiece();
+            
+            // Update next piece preview
+            updateNextPiecePreview();
             
             gameRunning = true;
             
@@ -836,67 +1021,147 @@
             }
         }
         
-        // Touch event handling for mobile
-        function setupTouchControls() {
+        // Setup mobile zone-based controls
+        function setupMobileControls() {
             if (!isMobile) return;
             
-            const buttons = {
-                btnLeft: () => movePiece(-1, 0),
-                btnRight: () => movePiece(1, 0),
-                btnRotate: () => rotatePiece(),
-                btnDrop: () => hardDrop(),
-                btnPause: () => {
-                    gameRunning = !gameRunning;
-                    if (gameRunning) {
-                        gameLoop = requestAnimationFrame(gameUpdate);
-                    } else if (gameLoop) {
-                        cancelAnimationFrame(gameLoop);
-                        gameLoop = null;
-                    }
-                    console.log(gameRunning ? 'Game unpaused' : 'Game paused');
-                },
-                btnRestart: () => startGame()
-            };
+            // Setup zone-based touch controls
+            setupZoneBasedControls();
             
-            // Add touch event listeners to buttons
-            Object.keys(buttons).forEach(buttonId => {
-                const button = document.getElementById(buttonId);
-                if (button) {
-                    // Use touchstart for immediate response
-                    button.addEventListener('touchstart', (e) => {
-                        e.preventDefault();
-                        if (gameRunning || buttonId === 'btnRestart' || buttonId === 'btnPause') {
-                            buttons[buttonId]();
-                        }
-                    }, { passive: false });
-                    
-                    // Prevent double-firing on click
-                    button.addEventListener('click', (e) => {
-                        e.preventDefault();
-                    });
-                }
-            });
-            
-            // Setup gesture recognition on game board
-            setupGestureRecognition();
-            
-            console.log('Touch controls setup complete');
+            console.log('Mobile zone-based controls setup complete');
         }
         
-        // Advanced gesture recognition for game board
-        function setupGestureRecognition() {
-            const gameBoard = document.getElementById('gameBoard');
+        // Zone-based touch control system
+        function setupZoneBasedControls() {
+            const gameContainer = document.querySelector('.game-container');
             let touchStartTime = 0;
             let touchStartPos = { x: 0, y: 0 };
             let longPressTimer = null;
+            let lastTapTime = 0;
+            let singleTapTimer = null;
             
-            gameBoard.addEventListener('touchstart', (e) => {
+            // Get zone boundaries
+            function getZoneBoundaries() {
+                const gameBoard = document.getElementById('gameBoard');
+                const boardRect = gameBoard.getBoundingClientRect();
+                const containerRect = gameContainer.getBoundingClientRect();
+                
+                return {
+                    gameBoard: {
+                        left: boardRect.left,
+                        right: boardRect.right,
+                        top: boardRect.top,
+                        bottom: boardRect.bottom
+                    },
+                    leftZone: {
+                        left: containerRect.left,
+                        right: boardRect.left,
+                        top: containerRect.top,
+                        bottom: containerRect.bottom
+                    },
+                    rightZone: {
+                        left: boardRect.right,
+                        right: containerRect.right,
+                        top: containerRect.top,
+                        bottom: containerRect.bottom
+                    },
+                    bottomZone: {
+                        left: containerRect.left,
+                        right: containerRect.right,
+                        top: boardRect.bottom,
+                        bottom: containerRect.bottom
+                    }
+                };
+            }
+            
+            // Determine which zone was touched
+            function getTouchZone(x, y) {
+                const zones = getZoneBoundaries();
+                
+                // Check if touch is within game board
+                if (x >= zones.gameBoard.left && x <= zones.gameBoard.right &&
+                    y >= zones.gameBoard.top && y <= zones.gameBoard.bottom) {
+                    return 'grid';
+                }
+                
+                // Check left zone
+                if (x >= zones.leftZone.left && x <= zones.leftZone.right &&
+                    y >= zones.leftZone.top && y <= zones.leftZone.bottom) {
+                    return 'left';
+                }
+                
+                // Check right zone
+                if (x >= zones.rightZone.left && x <= zones.rightZone.right &&
+                    y >= zones.rightZone.top && y <= zones.rightZone.bottom) {
+                    return 'right';
+                }
+                
+                // Check bottom zone
+                if (x >= zones.bottomZone.left && x <= zones.bottomZone.right &&
+                    y >= zones.bottomZone.top && y <= zones.bottomZone.bottom) {
+                    return 'bottom';
+                }
+                
+                return 'outside';
+            }
+            
+            // Add visual feedback for zone touches
+            function showZoneFeedback(zone, x, y) {
+                const feedback = document.createElement('div');
+                feedback.className = `zone-feedback zone-${zone}`;
+                feedback.style.position = 'fixed';
+                feedback.style.left = (x - 20) + 'px';
+                feedback.style.top = (y - 20) + 'px';
+                feedback.style.width = '40px';
+                feedback.style.height = '40px';
+                feedback.style.borderRadius = '50%';
+                feedback.style.pointerEvents = 'none';
+                feedback.style.zIndex = '1000';
+                feedback.style.opacity = '0.8';
+                feedback.style.animation = 'zoneFeedback 0.3s ease-out forwards';
+                
+                if (zone === 'grid') {
+                    feedback.style.background = 'radial-gradient(circle, rgba(0,255,255,0.6) 0%, rgba(0,255,255,0) 70%)';
+                } else if (zone === 'left') {
+                    feedback.style.background = 'radial-gradient(circle, rgba(255,0,153,0.6) 0%, rgba(255,0,153,0) 70%)';
+                    feedback.innerHTML = '←';
+                    feedback.style.color = '#ff0099';
+                    feedback.style.fontSize = '20px';
+                    feedback.style.textAlign = 'center';
+                    feedback.style.lineHeight = '40px';
+                } else if (zone === 'right') {
+                    feedback.style.background = 'radial-gradient(circle, rgba(0,255,0,0.6) 0%, rgba(0,255,0,0) 70%)';
+                    feedback.innerHTML = '→';
+                    feedback.style.color = '#00ff00';
+                    feedback.style.fontSize = '20px';
+                    feedback.style.textAlign = 'center';
+                    feedback.style.lineHeight = '40px';
+                } else if (zone === 'bottom') {
+                    feedback.style.background = 'radial-gradient(circle, rgba(255,255,0,0.6) 0%, rgba(255,255,0,0) 70%)';
+                    feedback.innerHTML = '⬇⬇';
+                    feedback.style.color = '#ffff00';
+                    feedback.style.fontSize = '18px';
+                    feedback.style.textAlign = 'center';
+                    feedback.style.lineHeight = '40px';
+                }
+                
+                document.body.appendChild(feedback);
+                
+                setTimeout(() => {
+                    if (feedback.parentNode) {
+                        feedback.parentNode.removeChild(feedback);
+                    }
+                }, 300);
+            }
+            
+            gameContainer.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 touchStartTime = performance.now();
                 const touch = e.touches[0];
                 touchStartPos = { x: touch.clientX, y: touch.clientY };
                 
-                // Setup long press detection for pause
+                // Setup long press detection (pause or hard drop based on zone)
+                const startZone = getTouchZone(touch.clientX, touch.clientY);
                 longPressTimer = setTimeout(() => {
                     if (longPressTimer) {
                         // Trigger haptic feedback if supported
@@ -904,22 +1169,52 @@
                             navigator.vibrate(100);
                         }
                         
-                        // Pause/unpause game
-                        gameRunning = !gameRunning;
-                        if (gameRunning) {
-                            gameLoop = requestAnimationFrame(gameUpdate);
-                        } else if (gameLoop) {
-                            cancelAnimationFrame(gameLoop);
-                            gameLoop = null;
+                        if (startZone === 'bottom' && gameRunning) {
+                            // Bottom zone long press = hard drop
+                            hardDrop();
+                            showZoneFeedback('bottom', touch.clientX, touch.clientY);
+                            console.log('Long press: bottom zone -> hard drop');
+                        } else {
+                            // All other zones = pause/unpause game
+                            gameRunning = !gameRunning;
+                            if (gameRunning) {
+                                gameLoop = requestAnimationFrame(gameUpdate);
+                            } else if (gameLoop) {
+                                cancelAnimationFrame(gameLoop);
+                                gameLoop = null;
+                            }
+                            console.log('Long press: Game ' + (gameRunning ? 'unpaused' : 'paused'));
                         }
-                        console.log('Long press: Game ' + (gameRunning ? 'unpaused' : 'paused'));
                         longPressTimer = null;
                     }
                 }, 500);
                 
+                // Handle double-tap detection for grid zone only
+                const zone = getTouchZone(touch.clientX, touch.clientY);
+                if (zone === 'grid') {
+                    const now = performance.now();
+                    const timeSinceLastTap = now - lastTapTime;
+                    
+                    if (timeSinceLastTap < 250) {
+                        // Double tap detected in grid - cancel single tap and execute hard drop
+                        if (singleTapTimer) {
+                            clearTimeout(singleTapTimer);
+                            singleTapTimer = null;
+                        }
+                        if (gameRunning) {
+                            hardDrop();
+                            showZoneFeedback('grid', touch.clientX, touch.clientY);
+                            console.log('Zone: grid double-tap -> hard drop');
+                        }
+                        lastTapTime = 0; // Reset to prevent triple-tap issues
+                    } else {
+                        lastTapTime = now;
+                    }
+                }
+                
             }, { passive: false });
             
-            gameBoard.addEventListener('touchmove', (e) => {
+            gameContainer.addEventListener('touchmove', (e) => {
                 e.preventDefault();
                 // Cancel long press if moving
                 if (longPressTimer) {
@@ -928,7 +1223,7 @@
                 }
             }, { passive: false });
             
-            gameBoard.addEventListener('touchend', (e) => {
+            gameContainer.addEventListener('touchend', (e) => {
                 e.preventDefault();
                 
                 // Cancel long press timer
@@ -948,56 +1243,40 @@
                 const deltaY = endPos.y - touchStartPos.y;
                 const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
                 
-                // Quick tap = rotate
+                // Only process taps (not swipes)
                 if (distance < 20 && duration < 200) {
-                    rotatePiece();
-                    console.log('Gesture: tap -> rotate');
-                    return;
-                }
-                
-                // Double tap = hard drop (handled separately)
-                // Swipe gestures
-                if (distance > 30) {
-                    const velocity = distance / duration;
+                    const zone = getTouchZone(touch.clientX, touch.clientY);
                     
-                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                        // Horizontal swipe
-                        if (deltaX > 0) {
-                            movePiece(1, 0); // Swipe right
-                            console.log('Gesture: swipe right');
-                        } else {
-                            movePiece(-1, 0); // Swipe left
-                            console.log('Gesture: swipe left');
-                        }
-                    } else if (deltaY > 0) {
-                        // Swipe down = soft drop or hard drop based on velocity
-                        if (velocity > 2) {
-                            hardDrop();
-                            console.log('Gesture: fast swipe down -> hard drop');
-                        } else {
-                            movePiece(0, 1);
-                            console.log('Gesture: swipe down -> soft drop');
-                        }
+                    if (zone === 'grid') {
+                        // Grid tap - rotate piece (with delay for double-tap detection)
+                        singleTapTimer = setTimeout(() => {
+                            if (gameRunning) {
+                                rotatePiece();
+                                showZoneFeedback('grid', touch.clientX, touch.clientY);
+                                console.log('Zone: grid tap -> rotate');
+                            }
+                            singleTapTimer = null;
+                        }, 250);
+                    } else if (zone === 'left') {
+                        // Left zone tap - move piece left
+                        movePiece(-1, 0);
+                        showZoneFeedback('left', touch.clientX, touch.clientY);
+                        console.log('Zone: left tap -> move left');
+                    } else if (zone === 'right') {
+                        // Right zone tap - move piece right
+                        movePiece(1, 0);
+                        showZoneFeedback('right', touch.clientX, touch.clientY);
+                        console.log('Zone: right tap -> move right');
+                    } else if (zone === 'bottom') {
+                        // Bottom zone tap - soft drop (move down one row)
+                        movePiece(0, 1);
+                        showZoneFeedback('bottom', touch.clientX, touch.clientY);
+                        console.log('Zone: bottom tap -> soft drop');
                     }
                 }
             }, { passive: false });
             
-            // Double tap detection
-            let lastTapTime = 0;
-            gameBoard.addEventListener('touchstart', (e) => {
-                const now = performance.now();
-                if (now - lastTapTime < 300) {
-                    // Double tap detected
-                    e.preventDefault();
-                    if (gameRunning) {
-                        hardDrop();
-                        console.log('Gesture: double tap -> hard drop');
-                    }
-                }
-                lastTapTime = now;
-            }, { passive: false });
-            
-            console.log('Gesture recognition setup complete');
+            console.log('Zone-based touch controls setup complete');
         }
         
 
@@ -1063,7 +1342,7 @@
             registerServiceWorker();
             
             initializeBoard();
-            setupTouchControls();
+            setupMobileControls();
             console.log('Game initialized successfully');
             
             // Start the game automatically

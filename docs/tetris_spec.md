@@ -76,7 +76,7 @@ Build a fully functional Tetris game that runs locally in a browser with modern 
 ### UI Elements
 - **Score Display:** Top of screen, neon green glow
 - **Level Display:** Alongside score, neon cyan
-- **Next Piece Preview:** Small preview area (if time permits)
+- **Next Piece Preview:** Right side panel, small 4x4 grid with next piece shown in proper color/glow
 - **Game Over Screen:** Tron-style with restart option
 
 ## Implementation Priorities
@@ -94,6 +94,7 @@ Build a fully functional Tetris game that runs locally in a browser with modern 
 2. Basic glow effects on pieces
 3. Grid line styling
 4. Neon score/level text
+5. Next piece preview with mini-grid
 
 ### Nice-to-Have (Enhanced Effects)
 1. Line-clearing explosion animations

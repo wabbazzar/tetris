@@ -15,29 +15,56 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
 ### Touch Control System
 
 #### Gesture Controls (Primary Interface)
-- **Horizontal Swipe**: Move piece left/right
-  - Minimum swipe distance: 30px
-  - Velocity threshold for responsiveness
-  - Visual feedback during swipe
-- **Vertical Swipe Down**: Soft drop (accelerated falling)
-  - Continuous soft drop while finger held down
-  - Smooth acceleration curve
-- **Tap**: Rotate piece clockwise
-  - Single tap anywhere on game board
-  - Visual rotation feedback
-- **Double Tap**: Hard drop (instant placement)
-  - Quick double-tap recognition
+- **Grid Tap**: Rotate piece clockwise
+  - Single tap anywhere within the game board grid
+  - Visual rotation feedback with piece preview
+  - 250ms delay to differentiate from double-tap
+- **Grid Double-Tap**: Hard drop (instant placement)
+  - Quick double-tap anywhere within the game board grid
   - Immediate drop with visual trail effect
-- **Long Press**: Pause/unpause game
-  - 500ms press duration
+  - Must occur within 250ms of first tap
+- **Left Zone Tap**: Move piece left
+  - Tap anywhere to the left of the game board
+  - Immediate leftward movement
+  - Visual feedback in left zone
+- **Right Zone Tap**: Move piece right
+  - Tap anywhere to the right of the game board  
+  - Immediate rightward movement
+  - Visual feedback in right zone
+- **Long Press (General)**: Pause/unpause game
+  - 500ms press duration in non-bottom zones
   - Haptic feedback confirmation
+  - Visual pause indicator
+- **Bottom Zone Long Press**: Hard drop
+  - 500ms press duration in bottom zone below game board
+  - Immediate hard drop activation
+  - Visual downward trail effect
+  - Distinct from pause functionality
+
+#### Touch Zone Layout
+- **Game Board Zone**: Central rectangle containing the 10x20 grid
+  - Primary interaction area for rotation and hard drop
+  - Visual grid boundaries clearly defined
+  - Tap feedback with subtle glow effect
+- **Left Movement Zone**: Area to the left of game board
+  - Extends from screen edge to game board left border
+  - Visual indicator when tapped (left arrow effect)
+  - Comfortable thumb-reachable area
+- **Right Movement Zone**: Area to the right of game board  
+  - Extends from game board right border to screen edge
+  - Visual indicator when tapped (right arrow effect)
+  - Comfortable thumb-reachable area
+- **Bottom Drop Zone**: Area below game board
+  - Extends full width below game board bottom border
+  - Long press (500ms) triggers hard drop
+  - Visual downward double-arrow (⬇⬇) feedback
+  - Alternative to double-tap for hard drop
 
 #### Touch Button Controls (Secondary Interface)
-- **Rotate Button**: Large, easily accessible rotation control
-- **Drop Button**: Instant hard drop
-- **Pause Button**: Game state control
-- **Restart Button**: New game (when game over)
-- **Settings Button**: Control preferences toggle
+- **Removed**: Traditional button controls eliminated for cleaner UI
+- **Zone-Based**: Intuitive spatial control system replaces buttons
+- **Visual Feedback**: Clear zone boundaries with touch indicators
+- **Accessibility**: Large touch targets with clear visual hierarchy
 
 ### Mobile UX Design
 
@@ -55,8 +82,11 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
   - Primary gesture area for game board
   - Secondary button controls below
 - **Next Piece Preview**:
-  - Top-right corner, smaller size
-  - Optional in minimal UI mode
+  - Header area, top-right corner
+  - Small 3x3 or 4x4 mini-grid
+  - Maintains piece color and glow effects
+  - Space-efficient design for mobile
+  - Toggleable in minimal UI mode
 
 #### Visual Feedback System
 - **Touch Indicators**: 
@@ -202,7 +232,8 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
 2. Responsive layout for portrait mobile
 3. Touch-friendly UI controls
 4. Performance optimization for 60 FPS
-5. Basic PWA features (manifest, icons)
+5. Next piece preview in header
+6. Basic PWA features (manifest, icons)
 
 ### Should-Have (Enhanced Mobile UX)
 1. Haptic feedback integration

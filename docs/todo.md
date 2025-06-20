@@ -104,6 +104,7 @@ auto-test:
 ### 2.3 Piece Rendering
 - [ ] Create single drawPiece(piece, x, y) method
 - [ ] Implement piece preview rendering
+- [ ] Create next piece preview mini-grid (4x4)
 - [ ] Test visual appearance in all positions
 - [ ] Verify glow effects apply correctly
 
@@ -167,7 +168,7 @@ auto-test:
 - [ ] Create pause/unpause functionality
 - [ ] Add game over detection
 - [ ] Implement restart mechanism
-- [ ] Add next piece preview
+- [ ] Add next piece preview display in right panel
 
 ### 5.3 Visual Polish
 - [ ] Add Tron-style background grid
