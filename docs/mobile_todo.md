@@ -105,17 +105,16 @@ clean-mobile:
 - [ ] Create debounced tap processing with double-tap detection
 - [ ] Add visual feedback system for each touch zone
 
-### 2.3 Zone-Based Control Implementation
+### 2.3 Simplified Control Implementation
 - [ ] **Grid Tap**: Implement piece rotation
   - Single tap anywhere within game board boundaries
-  - 250ms delay to differentiate from double-tap
+  - Immediate response (no delay)
   - Visual rotation feedback with piece preview
-  - Prevent rotation during double-tap sequence
-- [ ] **Grid Double-Tap**: Implement hard drop
-  - Rapid double-tap detection within game board (< 250ms)
-  - Instant drop with visual trail effect
-  - Cancel single-tap timer when double-tap detected
-  - Visual confirmation animation
+- [ ] **Slide Down**: Implement soft drop
+  - Vertical swipe down gesture within game board
+  - Continuous movement while finger held down
+  - Smooth acceleration curve
+  - Visual downward movement feedback
 - [ ] **Left Zone Tap**: Implement left movement
   - Detect taps in area left of game board
   - Immediate piece movement left
@@ -126,15 +125,14 @@ clean-mobile:
   - Immediate piece movement right
   - Visual right arrow feedback in zone
   - Comfortable thumb-reachable area sizing
-- [ ] **Long Press (General)**: Implement pause/unpause (non-bottom zones)
-  - 500ms press duration detection in non-bottom areas
-  - Haptic feedback where supported
-  - Visual pause indicator overlay
-- [ ] **Bottom Zone Long Press**: Implement hard drop
-  - 500ms press duration in bottom zone below game board
+- [ ] **Long Press (Game Board)**: Implement hard drop
+  - 500ms press duration anywhere within game board
   - Immediate hard drop activation with visual trail
-  - Distinct from pause functionality
-  - Visual downward double-arrow feedback
+  - Haptic feedback where supported
+- [ ] **Scoreboard Tap**: Implement pause/unpause
+  - Tap detection in header/scoreboard area
+  - Visual pause indicator overlay
+  - Clean separation from gameplay controls
 
 ### 2.4 Touch Zone Visual Feedback
 - [ ] Create zone boundary indicators (subtle visual guides)

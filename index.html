@@ -945,9 +945,11 @@
         function gameUpdate() {
             if (!gameRunning) return;
             
-            // Auto-drop logic
+            // Auto-drop logic with smoother difficulty progression
             const now = Date.now();
-            const dropInterval = Math.max(100, 1000 - (level - 1) * 100);
+            // Smoother curve: starts at 1000ms, gradually decreases to 150ms minimum
+            // Formula: 1000 * (0.8 ^ (level-1)) with 150ms floor
+            const dropInterval = Math.max(150, Math.floor(1000 * Math.pow(0.8, level - 1)));
             
             if (now - lastDrop > dropInterval) {
                 movePiece(0, 1);
@@ -1031,14 +1033,14 @@
             console.log('Mobile zone-based controls setup complete');
         }
         
-        // Zone-based touch control system
+        // Simplified zone-based touch control system
         function setupZoneBasedControls() {
             const gameContainer = document.querySelector('.game-container');
+            const gameHeader = document.querySelector('.game-header');
             let touchStartTime = 0;
             let touchStartPos = { x: 0, y: 0 };
             let longPressTimer = null;
-            let lastTapTime = 0;
-            let singleTapTimer = null;
+            let isSwipeDown = false;
             
             // Get zone boundaries
             function getZoneBoundaries() {
@@ -1064,12 +1066,6 @@
                         right: containerRect.right,
                         top: containerRect.top,
                         bottom: containerRect.bottom
-                    },
-                    bottomZone: {
-                        left: containerRect.left,
-                        right: containerRect.right,
-                        top: boardRect.bottom,
-                        bottom: containerRect.bottom
                     }
                 };
             }
@@ -1094,12 +1090,6 @@
                 if (x >= zones.rightZone.left && x <= zones.rightZone.right &&
                     y >= zones.rightZone.top && y <= zones.rightZone.bottom) {
                     return 'right';
-                }
-                
-                // Check bottom zone
-                if (x >= zones.bottomZone.left && x <= zones.bottomZone.right &&
-                    y >= zones.bottomZone.top && y <= zones.bottomZone.bottom) {
-                    return 'bottom';
                 }
                 
                 return 'outside';
@@ -1136,13 +1126,6 @@
                     feedback.style.fontSize = '20px';
                     feedback.style.textAlign = 'center';
                     feedback.style.lineHeight = '40px';
-                } else if (zone === 'bottom') {
-                    feedback.style.background = 'radial-gradient(circle, rgba(255,255,0,0.6) 0%, rgba(255,255,0,0) 70%)';
-                    feedback.innerHTML = '⬇⬇';
-                    feedback.style.color = '#ffff00';
-                    feedback.style.fontSize = '18px';
-                    feedback.style.textAlign = 'center';
-                    feedback.style.lineHeight = '40px';
                 }
                 
                 document.body.appendChild(feedback);
@@ -1159,65 +1142,52 @@
                 touchStartTime = performance.now();
                 const touch = e.touches[0];
                 touchStartPos = { x: touch.clientX, y: touch.clientY };
+                isSwipeDown = false;
                 
-                // Setup long press detection (pause or hard drop based on zone)
-                const startZone = getTouchZone(touch.clientX, touch.clientY);
-                longPressTimer = setTimeout(() => {
-                    if (longPressTimer) {
-                        // Trigger haptic feedback if supported
-                        if ('vibrate' in navigator) {
-                            navigator.vibrate(100);
-                        }
-                        
-                        if (startZone === 'bottom' && gameRunning) {
-                            // Bottom zone long press = hard drop
-                            hardDrop();
-                            showZoneFeedback('bottom', touch.clientX, touch.clientY);
-                            console.log('Long press: bottom zone -> hard drop');
-                        } else {
-                            // All other zones = pause/unpause game
-                            gameRunning = !gameRunning;
-                            if (gameRunning) {
-                                gameLoop = requestAnimationFrame(gameUpdate);
-                            } else if (gameLoop) {
-                                cancelAnimationFrame(gameLoop);
-                                gameLoop = null;
-                            }
-                            console.log('Long press: Game ' + (gameRunning ? 'unpaused' : 'paused'));
-                        }
-                        longPressTimer = null;
-                    }
-                }, 500);
-                
-                // Handle double-tap detection for grid zone only
+                // Setup long press for hard drop (only in grid zone)
                 const zone = getTouchZone(touch.clientX, touch.clientY);
                 if (zone === 'grid') {
-                    const now = performance.now();
-                    const timeSinceLastTap = now - lastTapTime;
-                    
-                    if (timeSinceLastTap < 250) {
-                        // Double tap detected in grid - cancel single tap and execute hard drop
-                        if (singleTapTimer) {
-                            clearTimeout(singleTapTimer);
-                            singleTapTimer = null;
-                        }
-                        if (gameRunning) {
+                    longPressTimer = setTimeout(() => {
+                        if (longPressTimer && gameRunning) {
+                            // Trigger haptic feedback if supported
+                            if ('vibrate' in navigator) {
+                                navigator.vibrate(100);
+                            }
+                            
+                            // Long press in grid = hard drop
                             hardDrop();
                             showZoneFeedback('grid', touch.clientX, touch.clientY);
-                            console.log('Zone: grid double-tap -> hard drop');
+                            console.log('Long press: grid -> hard drop');
+                            longPressTimer = null;
                         }
-                        lastTapTime = 0; // Reset to prevent triple-tap issues
-                    } else {
-                        lastTapTime = now;
-                    }
+                    }, 500);
                 }
                 
             }, { passive: false });
             
             gameContainer.addEventListener('touchmove', (e) => {
                 e.preventDefault();
-                // Cancel long press if moving
-                if (longPressTimer) {
+                
+                if (!gameRunning) return;
+                
+                const touch = e.touches[0];
+                const currentPos = { x: touch.clientX, y: touch.clientY };
+                const deltaY = currentPos.y - touchStartPos.y;
+                const deltaX = currentPos.x - touchStartPos.x;
+                
+                // Check if this is a downward swipe in the grid
+                const zone = getTouchZone(touch.clientX, touch.clientY);
+                if (zone === 'grid' && deltaY > 20 && Math.abs(deltaX) < 30) {
+                    if (!isSwipeDown) {
+                        isSwipeDown = true;
+                        // Start continuous soft drop
+                        movePiece(0, 1);
+                        console.log('Swipe down: soft drop started');
+                    }
+                }
+                
+                // Cancel long press if moving significantly
+                if (longPressTimer && (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10)) {
                     clearTimeout(longPressTimer);
                     longPressTimer = null;
                 }
@@ -1243,20 +1213,15 @@
                 const deltaY = endPos.y - touchStartPos.y;
                 const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
                 
-                // Only process taps (not swipes)
-                if (distance < 20 && duration < 200) {
+                // Only process taps (not swipes) and not if it was a swipe down
+                if (distance < 20 && duration < 200 && !isSwipeDown) {
                     const zone = getTouchZone(touch.clientX, touch.clientY);
                     
                     if (zone === 'grid') {
-                        // Grid tap - rotate piece (with delay for double-tap detection)
-                        singleTapTimer = setTimeout(() => {
-                            if (gameRunning) {
-                                rotatePiece();
-                                showZoneFeedback('grid', touch.clientX, touch.clientY);
-                                console.log('Zone: grid tap -> rotate');
-                            }
-                            singleTapTimer = null;
-                        }, 250);
+                        // Grid tap - rotate piece (immediate response)
+                        rotatePiece();
+                        showZoneFeedback('grid', touch.clientX, touch.clientY);
+                        console.log('Zone: grid tap -> rotate');
                     } else if (zone === 'left') {
                         // Left zone tap - move piece left
                         movePiece(-1, 0);
@@ -1267,16 +1232,35 @@
                         movePiece(1, 0);
                         showZoneFeedback('right', touch.clientX, touch.clientY);
                         console.log('Zone: right tap -> move right');
-                    } else if (zone === 'bottom') {
-                        // Bottom zone tap - soft drop (move down one row)
-                        movePiece(0, 1);
-                        showZoneFeedback('bottom', touch.clientX, touch.clientY);
-                        console.log('Zone: bottom tap -> soft drop');
                     }
                 }
+                
+                // Reset swipe state
+                isSwipeDown = false;
             }, { passive: false });
             
-            console.log('Zone-based touch controls setup complete');
+            // Add scoreboard tap for pause/unpause
+            gameHeader.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Toggle pause state
+                gameRunning = !gameRunning;
+                if (gameRunning) {
+                    gameLoop = requestAnimationFrame(gameUpdate);
+                } else if (gameLoop) {
+                    cancelAnimationFrame(gameLoop);
+                    gameLoop = null;
+                }
+                
+                // Visual feedback
+                const touch = e.touches[0];
+                showZoneFeedback('grid', touch.clientX, touch.clientY);
+                console.log('Scoreboard tap: Game ' + (gameRunning ? 'unpaused' : 'paused'));
+                
+            }, { passive: false });
+            
+            console.log('Simplified zone-based touch controls setup complete');
         }
         
 

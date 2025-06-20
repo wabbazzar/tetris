@@ -18,11 +18,12 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
 - **Grid Tap**: Rotate piece clockwise
   - Single tap anywhere within the game board grid
   - Visual rotation feedback with piece preview
-  - 250ms delay to differentiate from double-tap
-- **Grid Double-Tap**: Hard drop (instant placement)
-  - Quick double-tap anywhere within the game board grid
-  - Immediate drop with visual trail effect
-  - Must occur within 250ms of first tap
+  - Immediate response (no delay)
+- **Slide Down**: Soft drop (accelerated falling)
+  - Vertical swipe down gesture within game board
+  - Continuous movement while finger held down
+  - Smooth acceleration curve
+  - Visual downward movement feedback
 - **Left Zone Tap**: Move piece left
   - Tap anywhere to the left of the game board
   - Immediate leftward movement
@@ -31,19 +32,18 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
   - Tap anywhere to the right of the game board  
   - Immediate rightward movement
   - Visual feedback in right zone
-- **Long Press (General)**: Pause/unpause game
-  - 500ms press duration in non-bottom zones
+- **Long Press (Game Board)**: Hard drop (instant placement)
+  - 500ms press duration anywhere within game board
+  - Immediate drop with visual trail effect
   - Haptic feedback confirmation
-  - Visual pause indicator
-- **Bottom Zone Long Press**: Hard drop
-  - 500ms press duration in bottom zone below game board
-  - Immediate hard drop activation
-  - Visual downward trail effect
-  - Distinct from pause functionality
+- **Scoreboard Tap**: Pause/unpause game
+  - Tap anywhere on the score/level header area
+  - Visual pause indicator overlay
+  - Clean separation from gameplay controls
 
 #### Touch Zone Layout
 - **Game Board Zone**: Central rectangle containing the 10x20 grid
-  - Primary interaction area for rotation and hard drop
+  - Primary interaction area for rotation, slide down, and long press hard drop
   - Visual grid boundaries clearly defined
   - Tap feedback with subtle glow effect
 - **Left Movement Zone**: Area to the left of game board
@@ -54,11 +54,10 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
   - Extends from game board right border to screen edge
   - Visual indicator when tapped (right arrow effect)
   - Comfortable thumb-reachable area
-- **Bottom Drop Zone**: Area below game board
-  - Extends full width below game board bottom border
-  - Long press (500ms) triggers hard drop
-  - Visual downward double-arrow (⬇⬇) feedback
-  - Alternative to double-tap for hard drop
+- **Scoreboard Zone**: Header area with score and level display
+  - Tap anywhere in header to pause/unpause
+  - Visual pause indicator when activated
+  - Clean separation from gameplay controls
 
 #### Touch Button Controls (Secondary Interface)
 - **Removed**: Traditional button controls eliminated for cleaner UI
