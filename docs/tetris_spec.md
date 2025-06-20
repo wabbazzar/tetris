@@ -32,7 +32,7 @@ Build a fully functional Tetris game that runs locally in a browser with modern 
 - **Down Arrow / S:** Soft drop (faster falling)
 - **Up Arrow / W:** Rotate piece clockwise
 - **Spacebar:** Hard drop (instant placement)
-- **P:** Pause/unpause game
+- **P:** Pause/unpause game (works both when running and paused)
 - **R:** Restart (when game over)
 
 ### Game Logic
@@ -69,6 +69,11 @@ Build a fully functional Tetris game that runs locally in a browser with modern 
 - **Glowing Effects:** All game pieces should have CSS glow/shadow effects
 - **Grid Lines:** Subtle glowing grid pattern on game board
 - **Line Clear Explosions:** Animated neon "explosion" effect when lines are cleared
+- **Combo Animations:** Distinct animations for different line clears:
+  - Single (1 line): Green pulse effect
+  - Double (2 lines): Orange wave with 3D flip
+  - Triple (3 lines): Purple ripple with rotation
+  - Tetris (4 lines): Epic rainbow explosion with spinning text
 - **Level Up Animation:** Subtle cyan flash effect with "LEVEL X" text when advancing levels
 - **Background Grid:** Subtle Tron-style background grid pattern
 - **Neon Text:** Score and level display in glowing, retro-style font
@@ -97,6 +102,7 @@ Build a fully functional Tetris game that runs locally in a browser with modern 
 4. Neon score/level text
 5. Next piece preview with mini-grid
 6. Level up flash animation with text
+7. Combo animations for line clears (Single/Double/Triple/Tetris)
 
 ### Nice-to-Have (Enhanced Effects)
 1. Line-clearing explosion animations

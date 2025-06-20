@@ -142,11 +142,11 @@ auto-test:
 - [ ] Verify level display updates
 
 ### 4.2 Line Clearing System
-- [ ] Implement single checkLines() method
-- [ ] Add line clear explosion animation
-- [ ] Create neon particle effects
+- [x] Implement single checkLines() method
+- [x] Add line clear explosion animation (combo system)
+- [x] Create neon particle effects (combo animations)
 - [ ] Implement cascade drop animation
-- [ ] Update board state correctly
+- [x] Update board state correctly
 
 ### 4.3 Scoring & Levels
 - [ ] Create score calculation system
@@ -176,7 +176,8 @@ auto-test:
 - [ ] Implement smooth animations
 - [ ] Add retro-style fonts
 - [ ] Create game over animation
-- [ ] Level up flash animation with "LEVEL X" text display
+- [x] Level up flash animation with "LEVEL X" text display
+- [x] Combo animations for line clears (Single/Double/Triple/Tetris)
 
 ## Phase 6: Performance & Final Testing
 
@@ -255,11 +256,12 @@ auto-test:
 - [ ] All controls responsive
 
 ### Visual Requirements
-- [ ] Tron aesthetic with dark background
-- [ ] All pieces have distinct neon colors
-- [ ] Glow effects on all game elements
-- [ ] Smooth animations throughout
-- [ ] Level up flash animation with neon text
+- [x] Tron aesthetic with dark background
+- [x] All pieces have distinct neon colors
+- [x] Glow effects on all game elements
+- [x] Smooth animations throughout
+- [x] Level up flash animation with neon text
+- [x] Combo animations with haptic feedback (Single/Double/Triple/Tetris)
 - [ ] Clean, modern arcade appearance
 - [ ] Grid lines subtle but visible
 

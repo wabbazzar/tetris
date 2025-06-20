@@ -92,13 +92,19 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
   - Subtle glow effect where finger touches
   - Gesture trail visualization
   - Button press animations
+- **Combo Animations**:
+  - Single line: Green pulse with short haptic buzz
+  - Double lines: Orange wave with double-pulse haptic
+  - Triple lines: Purple ripple with triple-pulse haptic
+  - Tetris: Rainbow explosion with celebration haptic pattern
+  - Mobile-responsive text sizing and point display
 - **Level Up Animation**:
   - Subtle cyan flash overlay on level advancement
   - "LEVEL X" text display with neon glow effect
   - Mobile-optimized text sizing and positioning
 - **Haptic Feedback**:
   - Piece placement vibration
-  - Line clear celebration vibration
+  - Line clear celebration vibration (combo-specific patterns)
   - Level up double-pulse vibration pattern
   - Collision/rotation failure light buzz
 - **Audio Considerations**:
@@ -238,7 +244,8 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
 4. Performance optimization for 60 FPS
 5. Next piece preview in header
 6. Level up flash animation with haptic feedback
-7. Basic PWA features (manifest, icons)
+7. Combo animations with haptic patterns (Single/Double/Triple/Tetris)
+8. Basic PWA features (manifest, icons)
 
 ### Should-Have (Enhanced Mobile UX)
 1. Haptic feedback integration

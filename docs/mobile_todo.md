@@ -168,14 +168,15 @@ clean-mobile:
 - [ ] Level up flash animation optimized for mobile screens
 
 ### 3.4 Visual Feedback System
-- [ ] Create single addTouchFeedback() method
-- [ ] Add subtle glow effects for touch points
+- [x] Create single addTouchFeedback() method
+- [x] Add subtle glow effects for touch points
 - [ ] Implement gesture trail visualization
-- [ ] Add haptic feedback integration (where supported)
-- [ ] Create touch-specific animation tweaks
-- [ ] Implement mobile next piece preview (3x3 mini-grid)
-- [ ] Level up animation with mobile-responsive text sizing
-- [ ] Haptic double-pulse pattern for level advancement
+- [x] Add haptic feedback integration (where supported)
+- [x] Create touch-specific animation tweaks
+- [x] Implement mobile next piece preview (3x3 mini-grid)
+- [x] Level up animation with mobile-responsive text sizing
+- [x] Haptic double-pulse pattern for level advancement
+- [x] Combo animations with mobile-optimized sizing and haptic patterns
 
 ## Phase 4: Progressive Web App (PWA) Features
 
@@ -320,13 +321,14 @@ clean-mobile:
 - [ ] Smooth animations and transitions
 
 ### Visual Design Requirements
-- [ ] Maintain Tron aesthetic on mobile screens
-- [ ] High contrast for outdoor mobile usage
-- [ ] Readable typography at mobile sizes
-- [ ] Consistent visual feedback system
-- [ ] Level up animation with mobile-optimized text scaling
-- [ ] Touch-friendly sizing (44px minimum targets)
-- [ ] Safe area handling for notched devices
+- [x] Maintain Tron aesthetic on mobile screens
+- [x] High contrast for outdoor mobile usage
+- [x] Readable typography at mobile sizes
+- [x] Consistent visual feedback system
+- [x] Level up animation with mobile-optimized text scaling
+- [x] Combo animations with mobile-responsive text and haptic patterns
+- [x] Touch-friendly sizing (44px minimum targets)
+- [x] Safe area handling for notched devices
 
 ## Common Mobile Pitfalls & Solutions
 

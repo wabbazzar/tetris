@@ -283,6 +283,101 @@
                 transform: translate(-50%, -50%) scale(0.8);
             }
         }
+        
+        /* Combo animations */
+        @keyframes comboSingle {
+            0% { opacity: 0; }
+            25% { opacity: 0.8; }
+            75% { opacity: 0.8; }
+            100% { opacity: 0; }
+        }
+        
+        @keyframes comboDouble {
+            0% { opacity: 0; transform: scale(0.8); }
+            25% { opacity: 1; transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { opacity: 1; }
+            100% { opacity: 0; transform: scale(0.9); }
+        }
+        
+        @keyframes comboTriple {
+            0% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+            25% { opacity: 1; transform: scale(1.3) rotate(5deg); }
+            50% { transform: scale(1) rotate(-5deg); }
+            75% { opacity: 1; transform: scale(1.1) rotate(0deg); }
+            100% { opacity: 0; transform: scale(0.8) rotate(0deg); }
+        }
+        
+        @keyframes comboTetris {
+            0% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+            15% { opacity: 1; transform: scale(1.5) rotate(10deg); }
+            30% { transform: scale(1.2) rotate(-10deg); }
+            45% { transform: scale(1.4) rotate(5deg); }
+            60% { transform: scale(1.1) rotate(-5deg); }
+            75% { opacity: 1; transform: scale(1.3) rotate(0deg); }
+            100% { opacity: 0; transform: scale(0.7) rotate(0deg); }
+        }
+        
+        /* Combo text animations */
+        @keyframes comboText1 {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            30% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+        }
+        
+        @keyframes comboText2 {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.6) rotateX(90deg); }
+            25% { opacity: 1; transform: translate(-50%, -50%) scale(1.2) rotateX(0deg); }
+            75% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotateX(0deg); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8) rotateX(-90deg); }
+        }
+        
+        @keyframes comboText3 {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4) rotateY(180deg); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.3) rotateY(0deg); }
+            40% { transform: translate(-50%, -50%) scale(1.1) rotateY(-10deg); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotateY(0deg); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7) rotateY(180deg); }
+        }
+        
+        @keyframes comboText4 {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotateZ(0deg); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1.5) rotateZ(360deg); }
+            30% { transform: translate(-50%, -50%) scale(1.2) rotateZ(720deg); }
+            45% { transform: translate(-50%, -50%) scale(1.4) rotateZ(1080deg); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotateZ(1440deg); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.6) rotateZ(1800deg); }
+        }
+        
+        /* Combo points animations */
+        @keyframes comboPoints1 {
+            0% { opacity: 0; transform: translate(-50%, -50%) translateY(20px); }
+            40% { opacity: 1; transform: translate(-50%, -50%) translateY(0px); }
+            80% { opacity: 1; transform: translate(-50%, -50%) translateY(0px); }
+            100% { opacity: 0; transform: translate(-50%, -50%) translateY(-10px); }
+        }
+        
+        @keyframes comboPoints2 {
+            0% { opacity: 0; transform: translate(-50%, -50%) translateY(30px) scale(0.8); }
+            35% { opacity: 1; transform: translate(-50%, -50%) translateY(0px) scale(1.1); }
+            80% { opacity: 1; transform: translate(-50%, -50%) translateY(0px) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) translateY(-15px) scale(0.9); }
+        }
+        
+        @keyframes comboPoints3 {
+            0% { opacity: 0; transform: translate(-50%, -50%) translateY(40px) scale(0.6); }
+            30% { opacity: 1; transform: translate(-50%, -50%) translateY(0px) scale(1.2); }
+            80% { opacity: 1; transform: translate(-50%, -50%) translateY(0px) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) translateY(-20px) scale(0.8); }
+        }
+        
+        @keyframes comboPoints4 {
+            0% { opacity: 0; transform: translate(-50%, -50%) translateY(50px) scale(0.4); }
+            25% { opacity: 1; transform: translate(-50%, -50%) translateY(0px) scale(1.3); }
+            80% { opacity: 1; transform: translate(-50%, -50%) translateY(0px) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) translateY(-25px) scale(0.7); }
+        }
     </style>
 </head>
 <body>
@@ -851,6 +946,105 @@
             console.log(`Level up animation: Level ${level}`);
         }
         
+        // Show combo animation based on lines cleared
+        function showComboAnimation(linesCleared) {
+            const comboNames = ['', 'SINGLE', 'DOUBLE', 'TRIPLE', 'TETRIS!'];
+            const comboColors = ['', '#00ff00', '#ff6600', '#9900ff', '#ff0099'];
+            const comboEffects = ['', 'comboSingle', 'comboDouble', 'comboTriple', 'comboTetris'];
+            
+            if (linesCleared < 1 || linesCleared > 4) return;
+            
+            // Create animation overlay
+            const overlay = document.createElement('div');
+            overlay.className = `combo-overlay combo-${linesCleared}`;
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.pointerEvents = 'none';
+            overlay.style.zIndex = '998';
+            overlay.style.opacity = '0';
+            overlay.style.animation = `${comboEffects[linesCleared]} 2s ease-out forwards`;
+            
+            // Different background effects for each combo
+            if (linesCleared === 1) {
+                // Single - subtle green pulse
+                overlay.style.background = 'radial-gradient(circle, rgba(0,255,0,0.15) 0%, rgba(0,255,0,0.05) 50%, transparent 80%)';
+            } else if (linesCleared === 2) {
+                // Double - orange wave
+                overlay.style.background = 'linear-gradient(45deg, rgba(255,102,0,0.2) 0%, rgba(255,102,0,0.1) 50%, transparent 100%)';
+            } else if (linesCleared === 3) {
+                // Triple - purple ripple
+                overlay.style.background = 'radial-gradient(circle, rgba(153,0,255,0.25) 0%, rgba(153,0,255,0.1) 40%, transparent 70%)';
+            } else if (linesCleared === 4) {
+                // Tetris - rainbow explosion!
+                overlay.style.background = 'conic-gradient(from 0deg, rgba(255,0,153,0.3), rgba(0,255,255,0.3), rgba(0,255,0,0.3), rgba(255,102,0,0.3), rgba(153,0,255,0.3), rgba(255,255,0,0.3), rgba(255,0,153,0.3))';
+            }
+            
+            // Add combo text
+            const comboText = document.createElement('div');
+            comboText.className = 'combo-text';
+            comboText.textContent = comboNames[linesCleared];
+            comboText.style.position = 'absolute';
+            comboText.style.top = '40%';
+            comboText.style.left = '50%';
+            comboText.style.transform = 'translate(-50%, -50%)';
+            comboText.style.fontSize = isMobile ? '2.5rem' : '3.5rem';
+            comboText.style.fontWeight = 'bold';
+            comboText.style.color = comboColors[linesCleared];
+            comboText.style.textShadow = `0 0 20px ${comboColors[linesCleared]}, 0 0 40px ${comboColors[linesCleared]}, 0 0 60px ${comboColors[linesCleared]}`;
+            comboText.style.textAlign = 'center';
+            comboText.style.fontFamily = 'monospace';
+            comboText.style.letterSpacing = '0.3em';
+            comboText.style.opacity = '0';
+            comboText.style.animation = `comboText${linesCleared} 2s ease-out forwards`;
+            
+            // Add points text
+            const pointsText = document.createElement('div');
+            pointsText.className = 'combo-points';
+            const points = [0, 100, 300, 500, 800][linesCleared] * level;
+            pointsText.textContent = `+${points} POINTS`;
+            pointsText.style.position = 'absolute';
+            pointsText.style.top = '60%';
+            pointsText.style.left = '50%';
+            pointsText.style.transform = 'translate(-50%, -50%)';
+            pointsText.style.fontSize = isMobile ? '1.2rem' : '1.5rem';
+            pointsText.style.fontWeight = 'bold';
+            pointsText.style.color = comboColors[linesCleared];
+            pointsText.style.textShadow = `0 0 10px ${comboColors[linesCleared]}, 0 0 20px ${comboColors[linesCleared]}`;
+            pointsText.style.textAlign = 'center';
+            pointsText.style.fontFamily = 'monospace';
+            pointsText.style.letterSpacing = '0.1em';
+            pointsText.style.opacity = '0';
+            pointsText.style.animation = `comboPoints${linesCleared} 2s ease-out forwards`;
+            
+            overlay.appendChild(comboText);
+            overlay.appendChild(pointsText);
+            document.body.appendChild(overlay);
+            
+            // Trigger haptic feedback based on combo
+            if ('vibrate' in navigator) {
+                const hapticPatterns = [
+                    [], // No vibration for 0 lines
+                    [50], // Single - short buzz
+                    [100, 50, 100], // Double - double pulse
+                    [150, 50, 150, 50, 150], // Triple - triple pulse
+                    [200, 100, 200, 100, 200, 100, 200] // Tetris - celebration pattern!
+                ];
+                navigator.vibrate(hapticPatterns[linesCleared]);
+            }
+            
+            // Remove overlay after animation
+            setTimeout(() => {
+                if (overlay.parentNode) {
+                    overlay.parentNode.removeChild(overlay);
+                }
+            }, 2000);
+            
+            console.log(`Combo animation: ${comboNames[linesCleared]} (+${points} points)`);
+        }
+        
         // Single method for moving pieces (following testing requirements)
         function movePiece(dx, dy) {
             if (!currentPiece || !gameRunning) return false;
@@ -968,6 +1162,9 @@
             }
             
             if (completedLines.length > 0) {
+                // Show combo animation first
+                showComboAnimation(completedLines.length);
+                
                 // Clear completed lines
                 completedLines.forEach(row => {
                     board.splice(row, 1);
@@ -1061,6 +1258,12 @@
             if (!gameRunning) {
                 if (event.key === 'r' || event.key === 'R') {
                     startGame();
+                } else if (event.key === 'p' || event.key === 'P') {
+                    // Allow unpause when game is paused
+                    event.preventDefault();
+                    gameRunning = true;
+                    gameLoop = requestAnimationFrame(gameUpdate);
+                    console.log('Game unpaused');
                 }
                 return;
             }
