@@ -2,21 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
     
     <!-- Cache-busting headers -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     
-    <title>Tetris Turbo - Tron Edition</title>
+    <!-- Mobile-specific meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Tetris Turbo">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <title>Tetris Turbo - Mobile Edition</title>
     
     <style>
-        /* Tron aesthetic base styles */
+        /* Mobile-first Tron aesthetic */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
         
         body {
@@ -24,47 +34,107 @@
             color: #00ffff;
             font-family: 'Courier New', monospace;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            touch-action: manipulation;
         }
         
         .game-container {
             display: flex;
-            gap: 20px;
-            align-items: flex-start;
+            flex-direction: column;
+            height: 100vh;
+            padding: 10px;
+            gap: 10px;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(0, 255, 255, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
         }
         
         .game-board {
-            width: 300px;
-            height: 600px;
+            flex: 1;
+            max-width: 100%;
+            margin: 0 auto;
             border: 2px solid #00ffff;
-            border-radius: 5px;
-            box-shadow: 0 0 20px #00ffff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px #00ffff;
             position: relative;
             overflow: hidden;
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        .touch-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 8px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            height: 120px;
         }
         
         .game-info {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            min-width: 200px;
+            display: none; /* Hidden on mobile, moved to header */
         }
         
         .score-display {
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00;
-            font-size: 18px;
+            font-size: clamp(14px, 4vw, 18px);
             font-weight: bold;
         }
         
         .level-display {
             color: #00ffff;
             text-shadow: 0 0 10px #00ffff;
-            font-size: 18px;
+            font-size: clamp(14px, 4vw, 18px);
             font-weight: bold;
+        }
+        
+        .touch-button {
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid #00ffff;
+            border-radius: 8px;
+            color: #00ffff;
+            font-family: inherit;
+            font-size: clamp(12px, 3vw, 16px);
+            font-weight: bold;
+            text-shadow: 0 0 5px #00ffff;
+            cursor: pointer;
+            touch-action: manipulation;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            transition: all 0.1s ease;
+        }
+        
+        .touch-button:active {
+            background: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 10px #00ffff;
+            transform: scale(0.95);
+        }
+        
+        .touch-button.primary {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: #00ff00;
+            color: #00ff00;
+            text-shadow: 0 0 5px #00ff00;
+        }
+        
+        .touch-button.primary:active {
+            background: rgba(0, 255, 0, 0.4);
+            box-shadow: 0 0 10px #00ff00;
         }
         
         .version-info {
@@ -75,17 +145,52 @@
             font-size: 10px;
         }
         
-        /* Grid cell styles */
+        /* Responsive grid cell styles */
         .cell {
             position: absolute;
-            width: 30px;
-            height: 30px;
             border: 1px solid rgba(0, 255, 255, 0.1);
+            transition: all 0.1s ease;
         }
         
         .cell.filled {
             border: 1px solid currentColor;
             box-shadow: 0 0 5px currentColor;
+        }
+        
+        /* Desktop breakpoint */
+        @media (min-width: 768px) {
+            .game-container {
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+            
+            .game-header {
+                display: none;
+            }
+            
+            .game-board {
+                width: 300px;
+                height: 600px;
+                flex: none;
+            }
+            
+            .game-info {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                min-width: 200px;
+            }
+            
+            .touch-controls {
+                display: none;
+            }
+            
+            .score-display,
+            .level-display {
+                font-size: 18px;
+            }
         }
         
         /* Piece colors with glow effects */
@@ -100,16 +205,38 @@
 </head>
 <body>
     <div class="game-container">
-        <div class="game-board" id="gameBoard">
-            <!-- Grid cells will be generated here -->
-        </div>
-        
-        <div class="game-info">
+        <!-- Mobile header with score/level -->
+        <div class="game-header">
             <div class="score-display">
                 SCORE: <span id="score">0</span>
             </div>
             <div class="level-display">
                 LEVEL: <span id="level">1</span>
+            </div>
+        </div>
+        
+        <!-- Game board -->
+        <div class="game-board" id="gameBoard">
+            <!-- Grid cells will be generated here -->
+        </div>
+        
+        <!-- Touch controls for mobile -->
+        <div class="touch-controls">
+            <button class="touch-button" id="btnLeft">◀</button>
+            <button class="touch-button" id="btnRotate">↻</button>
+            <button class="touch-button" id="btnRight">▶</button>
+            <button class="touch-button primary" id="btnDrop">⬇</button>
+            <button class="touch-button" id="btnPause">⏸</button>
+            <button class="touch-button" id="btnRestart">↻</button>
+        </div>
+        
+        <!-- Desktop info panel (hidden on mobile) -->
+        <div class="game-info">
+            <div class="score-display">
+                SCORE: <span id="scoreDesktop">0</span>
+            </div>
+            <div class="level-display">
+                LEVEL: <span id="levelDesktop">1</span>
             </div>
             <div class="controls" style="color: #666; font-size: 12px; margin-top: 20px;">
                 <div>CONTROLS:</div>
@@ -130,7 +257,8 @@
         // Game state and configuration
         const BOARD_WIDTH = 10;
         const BOARD_HEIGHT = 20;
-        const CELL_SIZE = 30;
+        let CELL_SIZE = 30; // Dynamic cell size for mobile
+        let isMobile = false;
         
         // Game board state array
         let board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(null));
@@ -211,28 +339,78 @@
         };
         
         // Version tracking for cache debugging
-        console.log('Tetris Turbo loaded - Version 1.0.0');
-        console.log('Cache Bust ID: tetris_turbo_v1');
+        console.log('Tetris Turbo Mobile loaded - Version 2.0.0');
+        console.log('Cache Bust ID: tetris_turbo_mobile_v2');
         console.log('Piece definitions loaded:', Object.keys(PIECES).length, 'pieces');
+        
+        // Mobile detection and initialization
+        function initializeMobile() {
+            // Detect mobile device
+            isMobile = window.innerWidth < 768 || ('ontouchstart' in window);
+            
+            // Calculate responsive cell size for mobile
+            if (isMobile) {
+                const gameBoard = document.getElementById('gameBoard');
+                const containerWidth = window.innerWidth - 40; // Account for padding
+                const containerHeight = window.innerHeight - 200; // Account for header/controls
+                
+                const cellSizeByWidth = Math.floor(containerWidth / BOARD_WIDTH);
+                const cellSizeByHeight = Math.floor(containerHeight / BOARD_HEIGHT);
+                
+                CELL_SIZE = Math.min(cellSizeByWidth, cellSizeByHeight, 35); // Max 35px on mobile
+                
+                // Update game board size
+                gameBoard.style.width = (BOARD_WIDTH * CELL_SIZE) + 'px';
+                gameBoard.style.height = (BOARD_HEIGHT * CELL_SIZE) + 'px';
+                
+                console.log('Mobile mode: Cell size =', CELL_SIZE + 'px');
+            }
+            
+            return isMobile;
+        }
+        
+        // Single method for updating mobile layout
+        function updateMobileLayout() {
+            if (!isMobile) return;
+            
+            // Update all cell positions with new size
+            for (let row = 0; row < BOARD_HEIGHT; row++) {
+                for (let col = 0; col < BOARD_WIDTH; col++) {
+                    const cell = document.getElementById(`cell-${row}-${col}`);
+                    if (cell) {
+                        cell.style.left = (col * CELL_SIZE) + 'px';
+                        cell.style.top = (row * CELL_SIZE) + 'px';
+                        cell.style.width = CELL_SIZE + 'px';
+                        cell.style.height = CELL_SIZE + 'px';
+                    }
+                }
+            }
+        }
         
         // Initialize the game board
         function initializeBoard() {
             const gameBoard = document.getElementById('gameBoard');
             gameBoard.innerHTML = '';
             
-            // Create 10x20 grid
+            // Initialize mobile layout first
+            initializeMobile();
+            
+            // Create 10x20 grid with responsive sizing
             for (let row = 0; row < BOARD_HEIGHT; row++) {
                 for (let col = 0; col < BOARD_WIDTH; col++) {
                     const cell = document.createElement('div');
                     cell.className = 'cell';
                     cell.id = `cell-${row}-${col}`;
-                    cell.style.left = `${col * CELL_SIZE}px`;
-                    cell.style.top = `${row * CELL_SIZE}px`;
+                    cell.style.left = (col * CELL_SIZE) + 'px';
+                    cell.style.top = (row * CELL_SIZE) + 'px';
+                    cell.style.width = CELL_SIZE + 'px';
+                    cell.style.height = CELL_SIZE + 'px';
                     gameBoard.appendChild(cell);
                 }
             }
             
             console.log('Game board initialized with', BOARD_WIDTH * BOARD_HEIGHT, 'cells');
+            console.log('Mobile mode:', isMobile, '| Cell size:', CELL_SIZE + 'px');
         }
         
         // Single method for updating cells (following testing requirements)
@@ -361,20 +539,42 @@
             return true;
         }
         
-        // Update score display
+        // Update score display (mobile and desktop)
         function updateScore(newScore = null) {
             if (newScore !== null) {
                 score = newScore;
             }
-            document.getElementById('score').textContent = score;
+            
+            // Update mobile score
+            const mobileScore = document.getElementById('score');
+            if (mobileScore) {
+                mobileScore.textContent = score;
+            }
+            
+            // Update desktop score
+            const desktopScore = document.getElementById('scoreDesktop');
+            if (desktopScore) {
+                desktopScore.textContent = score;
+            }
         }
         
-        // Update level display
+        // Update level display (mobile and desktop)
         function updateLevel(newLevel = null) {
             if (newLevel !== null) {
                 level = newLevel;
             }
-            document.getElementById('level').textContent = level;
+            
+            // Update mobile level
+            const mobileLevel = document.getElementById('level');
+            if (mobileLevel) {
+                mobileLevel.textContent = level;
+            }
+            
+            // Update desktop level
+            const desktopLevel = document.getElementById('levelDesktop');
+            if (desktopLevel) {
+                desktopLevel.textContent = level;
+            }
         }
         
         // Single method for moving pieces (following testing requirements)
@@ -633,9 +833,67 @@
             }
         }
         
+        // Touch event handling for mobile
+        function setupTouchControls() {
+            if (!isMobile) return;
+            
+            const buttons = {
+                btnLeft: () => movePiece(-1, 0),
+                btnRight: () => movePiece(1, 0),
+                btnRotate: () => rotatePiece(),
+                btnDrop: () => hardDrop(),
+                btnPause: () => {
+                    gameRunning = !gameRunning;
+                    if (gameRunning) {
+                        gameLoop = requestAnimationFrame(gameUpdate);
+                    } else if (gameLoop) {
+                        cancelAnimationFrame(gameLoop);
+                        gameLoop = null;
+                    }
+                    console.log(gameRunning ? 'Game unpaused' : 'Game paused');
+                },
+                btnRestart: () => startGame()
+            };
+            
+            // Add touch event listeners to buttons
+            Object.keys(buttons).forEach(buttonId => {
+                const button = document.getElementById(buttonId);
+                if (button) {
+                    // Use touchstart for immediate response
+                    button.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        if (gameRunning || buttonId === 'btnRestart' || buttonId === 'btnPause') {
+                            buttons[buttonId]();
+                        }
+                    }, { passive: false });
+                    
+                    // Prevent double-firing on click
+                    button.addEventListener('click', (e) => {
+                        e.preventDefault();
+                    });
+                }
+            });
+            
+            console.log('Touch controls setup complete');
+        }
+        
+
+        
+        // Handle orientation changes for mobile
+        function handleOrientationChange() {
+            if (!isMobile) return;
+            
+            setTimeout(() => {
+                initializeMobile();
+                updateMobileLayout();
+                console.log('Layout updated for orientation change');
+            }, 200);
+        }
+        
         // Initialize the game when page loads
         window.addEventListener('load', function() {
             initializeBoard();
+            setupTouchControls();
             console.log('Game initialized successfully');
             
             // Start the game automatically
@@ -644,8 +902,12 @@
             }, 1000);
         });
         
-        // Keyboard event listener
+        // Keyboard event listener (desktop)
         window.addEventListener('keydown', handleKeyDown);
+        
+        // Orientation change listener (mobile)
+        window.addEventListener('orientationchange', handleOrientationChange);
+        window.addEventListener('resize', handleOrientationChange);
     </script>
 </body>
 </html> 
