@@ -176,7 +176,7 @@ clean-mobile:
 - [x] Implement mobile next piece preview (3x3 mini-grid)
 - [x] Level up animation with mobile-responsive text sizing
 - [x] Haptic double-pulse pattern for level advancement
-- [x] Combo animations with mobile-optimized sizing and haptic patterns
+- [x] Combo animations with mobile-optimized sizing and haptic patterns (Double/Triple/Tetris)
 
 ## Phase 4: Progressive Web App (PWA) Features
 
@@ -326,7 +326,7 @@ clean-mobile:
 - [x] Readable typography at mobile sizes
 - [x] Consistent visual feedback system
 - [x] Level up animation with mobile-optimized text scaling
-- [x] Combo animations with mobile-responsive text and haptic patterns
+- [x] Combo animations with mobile-responsive text and haptic patterns (Double/Triple/Tetris)
 - [x] Touch-friendly sizing (44px minimum targets)
 - [x] Safe area handling for notched devices
 

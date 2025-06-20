@@ -285,13 +285,6 @@
         }
         
         /* Combo animations */
-        @keyframes comboSingle {
-            0% { opacity: 0; }
-            25% { opacity: 0.8; }
-            75% { opacity: 0.8; }
-            100% { opacity: 0; }
-        }
-        
         @keyframes comboDouble {
             0% { opacity: 0; transform: scale(0.8); }
             25% { opacity: 1; transform: scale(1.1); }
@@ -319,13 +312,6 @@
         }
         
         /* Combo text animations */
-        @keyframes comboText1 {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-            30% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-            70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
-        }
-        
         @keyframes comboText2 {
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0.6) rotateX(90deg); }
             25% { opacity: 1; transform: translate(-50%, -50%) scale(1.2) rotateX(0deg); }
@@ -351,13 +337,6 @@
         }
         
         /* Combo points animations */
-        @keyframes comboPoints1 {
-            0% { opacity: 0; transform: translate(-50%, -50%) translateY(20px); }
-            40% { opacity: 1; transform: translate(-50%, -50%) translateY(0px); }
-            80% { opacity: 1; transform: translate(-50%, -50%) translateY(0px); }
-            100% { opacity: 0; transform: translate(-50%, -50%) translateY(-10px); }
-        }
-        
         @keyframes comboPoints2 {
             0% { opacity: 0; transform: translate(-50%, -50%) translateY(30px) scale(0.8); }
             35% { opacity: 1; transform: translate(-50%, -50%) translateY(0px) scale(1.1); }
@@ -948,11 +927,11 @@
         
         // Show combo animation based on lines cleared
         function showComboAnimation(linesCleared) {
-            const comboNames = ['', 'SINGLE', 'DOUBLE', 'TRIPLE', 'TETRIS!'];
-            const comboColors = ['', '#00ff00', '#ff6600', '#9900ff', '#ff0099'];
-            const comboEffects = ['', 'comboSingle', 'comboDouble', 'comboTriple', 'comboTetris'];
+            const comboNames = ['', '', 'DOUBLE', 'TRIPLE', 'TETRIS!'];
+            const comboColors = ['', '', '#ff6600', '#9900ff', '#ff0099'];
+            const comboEffects = ['', '', 'comboDouble', 'comboTriple', 'comboTetris'];
             
-            if (linesCleared < 1 || linesCleared > 4) return;
+            if (linesCleared < 2 || linesCleared > 4) return;
             
             // Create animation overlay
             const overlay = document.createElement('div');
@@ -968,10 +947,7 @@
             overlay.style.animation = `${comboEffects[linesCleared]} 2s ease-out forwards`;
             
             // Different background effects for each combo
-            if (linesCleared === 1) {
-                // Single - subtle green pulse
-                overlay.style.background = 'radial-gradient(circle, rgba(0,255,0,0.15) 0%, rgba(0,255,0,0.05) 50%, transparent 80%)';
-            } else if (linesCleared === 2) {
+            if (linesCleared === 2) {
                 // Double - orange wave
                 overlay.style.background = 'linear-gradient(45deg, rgba(255,102,0,0.2) 0%, rgba(255,102,0,0.1) 50%, transparent 100%)';
             } else if (linesCleared === 3) {
@@ -1027,7 +1003,7 @@
             if ('vibrate' in navigator) {
                 const hapticPatterns = [
                     [], // No vibration for 0 lines
-                    [50], // Single - short buzz
+                    [], // No vibration for single lines
                     [100, 50, 100], // Double - double pulse
                     [150, 50, 150, 50, 150], // Triple - triple pulse
                     [200, 100, 200, 100, 200, 100, 200] // Tetris - celebration pattern!

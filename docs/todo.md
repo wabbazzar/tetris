@@ -177,7 +177,7 @@ auto-test:
 - [ ] Add retro-style fonts
 - [ ] Create game over animation
 - [x] Level up flash animation with "LEVEL X" text display
-- [x] Combo animations for line clears (Single/Double/Triple/Tetris)
+- [x] Combo animations for multi-line clears (Double/Triple/Tetris)
 
 ## Phase 6: Performance & Final Testing
 
@@ -261,7 +261,7 @@ auto-test:
 - [x] Glow effects on all game elements
 - [x] Smooth animations throughout
 - [x] Level up flash animation with neon text
-- [x] Combo animations with haptic feedback (Single/Double/Triple/Tetris)
+- [x] Combo animations with haptic feedback (Double/Triple/Tetris only)
 - [ ] Clean, modern arcade appearance
 - [ ] Grid lines subtle but visible
 
