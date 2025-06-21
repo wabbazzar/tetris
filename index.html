@@ -302,13 +302,12 @@
         }
         
         @keyframes comboTetris {
-            0% { opacity: 0; transform: scale(0.3) rotate(0deg); }
-            15% { opacity: 1; transform: scale(1.5) rotate(10deg); }
-            30% { transform: scale(1.2) rotate(-10deg); }
-            45% { transform: scale(1.4) rotate(5deg); }
-            60% { transform: scale(1.1) rotate(-5deg); }
-            75% { opacity: 1; transform: scale(1.3) rotate(0deg); }
-            100% { opacity: 0; transform: scale(0.7) rotate(0deg); }
+            0% { opacity: 0; transform: scale(0.5); }
+            20% { opacity: 1; transform: scale(1.4); }
+            40% { transform: scale(1.1); }
+            60% { transform: scale(1.3); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.8); }
         }
         
         /* Combo text animations */
@@ -328,12 +327,12 @@
         }
         
         @keyframes comboText4 {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotateZ(0deg); }
-            15% { opacity: 1; transform: translate(-50%, -50%) scale(1.5) rotateZ(360deg); }
-            30% { transform: translate(-50%, -50%) scale(1.2) rotateZ(720deg); }
-            45% { transform: translate(-50%, -50%) scale(1.4) rotateZ(1080deg); }
-            80% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotateZ(1440deg); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.6) rotateZ(1800deg); }
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.4); }
+            40% { transform: translate(-50%, -50%) scale(1.1); }
+            60% { transform: translate(-50%, -50%) scale(1.3); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
         }
         
         /* Combo points animations */
@@ -961,15 +960,32 @@
             // Add combo text
             const comboText = document.createElement('div');
             comboText.className = 'combo-text';
-            comboText.textContent = comboNames[linesCleared];
+            
+            // Special rainbow treatment for TETRIS!
+            if (linesCleared === 4) {
+                const tetrisText = 'TETRIS!';
+                const rainbowColors = ['#00ffff', '#ff6600', '#00ff00', '#ff0099', '#0099ff', '#ffff00', '#9900ff'];
+                
+                comboText.innerHTML = '';
+                for (let i = 0; i < tetrisText.length; i++) {
+                    const span = document.createElement('span');
+                    span.textContent = tetrisText[i];
+                    span.style.color = rainbowColors[i % rainbowColors.length];
+                    span.style.textShadow = `0 0 20px ${rainbowColors[i % rainbowColors.length]}, 0 0 40px ${rainbowColors[i % rainbowColors.length]}, 0 0 60px ${rainbowColors[i % rainbowColors.length]}`;
+                    comboText.appendChild(span);
+                }
+            } else {
+                comboText.textContent = comboNames[linesCleared];
+                comboText.style.color = comboColors[linesCleared];
+                comboText.style.textShadow = `0 0 20px ${comboColors[linesCleared]}, 0 0 40px ${comboColors[linesCleared]}, 0 0 60px ${comboColors[linesCleared]}`;
+            }
+            
             comboText.style.position = 'absolute';
             comboText.style.top = '40%';
             comboText.style.left = '50%';
             comboText.style.transform = 'translate(-50%, -50%)';
             comboText.style.fontSize = isMobile ? '2.5rem' : '3.5rem';
             comboText.style.fontWeight = 'bold';
-            comboText.style.color = comboColors[linesCleared];
-            comboText.style.textShadow = `0 0 20px ${comboColors[linesCleared]}, 0 0 40px ${comboColors[linesCleared]}, 0 0 60px ${comboColors[linesCleared]}`;
             comboText.style.textAlign = 'center';
             comboText.style.fontFamily = 'monospace';
             comboText.style.letterSpacing = '0.3em';
