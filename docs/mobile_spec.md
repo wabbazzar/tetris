@@ -64,6 +64,10 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
 - **Zone-Based**: Intuitive spatial control system replaces buttons
 - **Visual Feedback**: Clear zone boundaries with touch indicators
 - **Accessibility**: Large touch targets with clear visual hierarchy
+- **Menu/Overlay Buttons**: 
+  - Touch-optimized start/restart buttons with both click and touchstart events
+  - Minimum 44px touch targets for accessibility
+  - Visual hover/active states for feedback
 
 ### Mobile UX Design
 

@@ -82,7 +82,12 @@ Build a fully functional Tetris game that runs locally in a browser with modern 
 - **Score Display:** Top of screen, neon green glow
 - **Level Display:** Alongside score, neon cyan
 - **Next Piece Preview:** Right side panel, small 4x4 grid with next piece shown in proper color/glow
-- **Game Over Screen:** Tron-style with restart option
+- **Game Menu Overlay:** 
+  - Start screen with neon "Tetris Turbo" title
+  - Control instructions for both mobile and desktop
+  - Gradient start button with hover effects
+- **Pause Overlay:** Yellow neon "Paused" text with resume instructions
+- **Game Over Screen:** Pink neon "Game Over" with final score and restart button
 
 ## Implementation Priorities
 

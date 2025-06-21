@@ -1855,30 +1855,52 @@
             setupMobileControls();
             console.log('Game initialized successfully');
             
+            // Add start button functionality
+            document.getElementById('startButton').addEventListener('click', function() {
+                // Hide menu overlay
+                document.getElementById('menuOverlay').classList.remove('active');
+                
+                // Start the game
+                startGame();
+                console.log('Game started from menu');
+            });
+            
+            // Add touchstart for mobile
+            document.getElementById('startButton').addEventListener('touchstart', function(e) {
+                e.preventDefault(); // Prevent double-firing
+                // Hide menu overlay
+                document.getElementById('menuOverlay').classList.remove('active');
+                
+                // Start the game
+                startGame();
+                console.log('Game started from menu (touch)');
+            });
+            
+            // Add restart button functionality
+            document.getElementById('restartButton').addEventListener('click', function() {
+                // Hide game over overlay
+                document.getElementById('gameOverOverlay').classList.remove('active');
+                
+                // Start new game
+                startGame();
+                console.log('Game restarted');
+            });
+            
+            // Add touchstart for mobile
+            document.getElementById('restartButton').addEventListener('touchstart', function(e) {
+                e.preventDefault(); // Prevent double-firing
+                // Hide game over overlay
+                document.getElementById('gameOverOverlay').classList.remove('active');
+                
+                // Start new game
+                startGame();
+                console.log('Game restarted (touch)');
+            });
+            
             // Don't start automatically - wait for user to press start button
             // setTimeout(() => {
             //     startGame();
             // }, 1000);
-        });
-        
-        // Add start button functionality
-        document.getElementById('startButton').addEventListener('click', function() {
-            // Hide menu overlay
-            document.getElementById('menuOverlay').classList.remove('active');
-            
-            // Start the game
-            startGame();
-            console.log('Game started from menu');
-        });
-        
-        // Add restart button functionality
-        document.getElementById('restartButton').addEventListener('click', function() {
-            // Hide game over overlay
-            document.getElementById('gameOverOverlay').classList.remove('active');
-            
-            // Start new game
-            startGame();
-            console.log('Game restarted');
         });
         
         // Keyboard event listener (desktop)

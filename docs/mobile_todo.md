@@ -75,11 +75,13 @@ clean-mobile:
 - [ ] Add next piece preview area in mobile header
 
 ### 1.3 Mobile-First CSS Implementation
-- [ ] Implement mobile breakpoint strategy (320px-428px)
-- [ ] Create single updateMobileLayout() method
-- [ ] Add CSS custom properties for dynamic sizing
-- [ ] Implement touch-friendly spacing and sizing
-- [ ] Apply high-contrast colors for mobile readability
+- [x] Implement mobile breakpoint strategy (320px-428px)
+- [x] Create single updateMobileLayout() method
+- [x] Add CSS custom properties for dynamic sizing
+- [x] Implement touch-friendly spacing and sizing
+- [x] Apply high-contrast colors for mobile readability
+- [x] Add game menu overlay with mobile-optimized controls display
+- [x] Implement touch-friendly start/restart buttons with proper event handling
 
 ### 1.4 Layout Verification
 - [ ] Test on iPhone SE (375px) viewport

@@ -164,11 +164,13 @@ auto-test:
 - [ ] Verify all UI elements glow properly
 
 ### 5.2 Game States
-- [ ] Implement game state machine
-- [ ] Create pause/unpause functionality
-- [ ] Add game over detection
-- [ ] Implement restart mechanism
-- [ ] Add next piece preview display in right panel
+- [x] Implement game state machine
+- [x] Create pause/unpause functionality
+- [x] Add game over detection
+- [x] Implement restart mechanism
+- [x] Add next piece preview display in right panel
+- [x] Add game menu overlay with control instructions
+- [x] Create pause and game over overlays with neon styling
 
 ### 5.3 Visual Polish
 - [ ] Add Tron-style background grid
