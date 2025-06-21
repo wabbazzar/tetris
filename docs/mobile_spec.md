@@ -175,6 +175,7 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
 - **Auto-Pause**: Handle phone calls/notifications
 - **Background Handling**: Pause when app loses focus
 - **Resume Capability**: Restore game state on return
+- **Enhanced Game Over**: Display both final score and level attained
 
 #### Social Features (Optional)
 - **Score Sharing**: Share achievements via native share

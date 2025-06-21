@@ -273,6 +273,25 @@
             letter-spacing: 0.1rem;
         }
         
+        .game-over-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .score-text {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            margin-bottom: 0.5rem;
+        }
+        
+        .level-text {
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+            margin-bottom: 0;
+        }
+        
         @keyframes neonFlicker {
             0%, 100% {
                 text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
@@ -613,7 +632,10 @@
         <!-- Game over overlay -->
         <div class="game-overlay" id="gameOverOverlay">
             <h1 class="overlay-title gameover-title">Game Over</h1>
-            <p class="overlay-text" id="finalScore">Final Score: 0</p>
+            <div class="game-over-stats">
+                <p class="overlay-text score-text" id="finalScore">Final Score: 0</p>
+                <p class="overlay-text level-text" id="finalLevel">Level: 1</p>
+            </div>
             <button class="start-button" id="restartButton">Play Again</button>
         </div>
         
@@ -1421,10 +1443,11 @@
                 cancelAnimationFrame(gameLoop);
                 gameLoop = null;
             }
-            console.log('Game Over! Final Score:', score);
+            console.log('Game Over! Final Score:', score, 'Level:', level);
             
-            // Show game over overlay
+            // Show game over overlay with both score and level
             document.getElementById('finalScore').textContent = `Final Score: ${score}`;
+            document.getElementById('finalLevel').textContent = `Level: ${level}`;
             document.getElementById('gameOverOverlay').classList.add('active');
         }
         

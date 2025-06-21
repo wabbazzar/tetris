@@ -171,6 +171,7 @@ auto-test:
 - [x] Add next piece preview display in right panel
 - [x] Add game menu overlay with control instructions
 - [x] Create pause and game over overlays with neon styling
+- [ ] Enhance game over screen to show both final score and level attained
 
 ### 5.3 Visual Polish
 - [ ] Add Tron-style background grid

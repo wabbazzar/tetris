@@ -169,6 +169,7 @@ clean-mobile:
 - [ ] Add touch-specific collision feedback
 - [ ] Implement mobile performance monitoring
 - [ ] Level up flash animation optimized for mobile screens
+- [ ] Enhance game over screen to display both score and level with mobile-optimized text sizing
 
 ### 3.4 Visual Feedback System
 - [x] Create single addTouchFeedback() method

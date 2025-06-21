@@ -88,6 +88,10 @@ Build a fully functional Tetris game that runs locally in a browser with modern 
   - Gradient start button with hover effects
 - **Pause Overlay:** Yellow neon "Paused" text with resume instructions
 - **Game Over Screen:** Pink neon "Game Over" with final score and restart button
+  - Displays final score with neon green glow
+  - Shows level attained with neon cyan glow  
+  - Restart button to begin new game
+  - Maintains Tron aesthetic consistency
 
 ## Implementation Priorities
 
