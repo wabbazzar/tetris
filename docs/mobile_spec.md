@@ -40,6 +40,10 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
   - Tap anywhere on the score/level header area
   - Visual pause indicator overlay
   - Clean separation from gameplay controls
+- **Pause Overlay Tap**: Resume game when paused
+  - Tap anywhere on the pause overlay to resume
+  - Mobile-friendly large touch target
+  - Clear visual instructions
 
 #### Touch Zone Layout
 - **Game Board Zone**: Central rectangle containing the 10x20 grid

@@ -155,11 +155,12 @@ clean-mobile:
 - [ ] Test pause/resume via long press
 
 ### 3.2 Touch-Game Integration
-- [ ] Integrate gesture recognition with existing movePiece() method
-- [ ] Update rotatePiece() to work with tap gestures
-- [ ] Modify hardDrop() for double-tap activation
-- [ ] Update game pause system for long press
-- [ ] Add touch-specific input validation
+- [x] Integrate gesture recognition with existing movePiece() method
+- [x] Update rotatePiece() to work with tap gestures
+- [x] Modify hardDrop() for double-tap activation
+- [x] Update game pause system for long press
+- [x] Add touch-specific input validation
+- [x] Fix pause overlay blocking scoreboard on mobile - add tap-to-resume on overlay
 
 ### 3.3 Mobile-Specific Game Features
 - [ ] Implement game state persistence in localStorage
