@@ -285,3 +285,8 @@ auto-test:
 - Version: 1.0.0
 - Last Updated: [Auto-timestamp]
 - Cache Bust ID: tetris_turbo_v1
+
+## GitHub Pages Notes
+- Game URL: https://[username].github.io/tetris/index.html
+- Repository page (shows README): https://[username].github.io/tetris/
+- Direct game link added to README for easy access

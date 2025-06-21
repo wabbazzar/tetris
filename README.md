@@ -1,5 +1,7 @@
 # Tetris Turbo - Agentic Development Demo
 
+### [🎮 Play Tetris Turbo Now!](https://wabbazzar.github.io/tetris/index.html)
+
 ![Tetris Turbo Screenshot](docs/tetris-screenshot.png)
 
 > **A fully functional Tetris game built in 5 minutes using agentic development with Cursor AI**
