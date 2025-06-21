@@ -220,6 +220,168 @@
             }
         }
         
+        /* Game state overlays */
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            padding: 20px;
+            display: none;
+        }
+        
+        .game-overlay.active {
+            display: flex;
+        }
+        
+        .overlay-title {
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            font-weight: bold;
+        }
+        
+        .menu-title {
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
+            animation: neonFlicker 2s ease-in-out infinite alternate;
+        }
+        
+        .pause-title {
+            color: #ffff00;
+            text-shadow: 0 0 20px #ffff00, 0 0 40px #ffff00, 0 0 60px #ffff00;
+        }
+        
+        .gameover-title {
+            color: #ff0099;
+            text-shadow: 0 0 20px #ff0099, 0 0 40px #ff0099, 0 0 60px #ff0099;
+        }
+        
+        .overlay-text {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+        
+        @keyframes neonFlicker {
+            0%, 100% {
+                text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
+            }
+            50% {
+                text-shadow: 0 0 25px #00ffff, 0 0 50px #00ffff, 0 0 70px #00ffff;
+            }
+        }
+        
+        .overlay-subtitle {
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            color: #ff6600;
+            text-shadow: 0 0 10px #ff6600, 0 0 20px #ff6600;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+        
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .control-section {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .control-title {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        .control-item {
+            color: #ffffff;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            opacity: 0.8;
+            margin: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .control-key {
+            color: #ffff00;
+            text-shadow: 0 0 5px #ffff00;
+            font-weight: bold;
+        }
+        
+        .start-button {
+            background: linear-gradient(45deg, #00ffff, #0099ff);
+            border: none;
+            padding: 1rem 3rem;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px #00ffff;
+            transition: all 0.3s ease;
+            color: #000;
+            font-weight: bold;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .start-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translate(-50%, -50%) rotate(45deg) scale(0);
+            transition: transform 0.6s;
+        }
+        
+        .start-button:hover::before {
+            transform: translate(-50%, -50%) rotate(45deg) scale(2);
+        }
+        
+        .start-button:active {
+            transform: scale(0.95);
+        }
+        
+        /* Hide desktop controls on mobile */
+        @media (max-width: 767px) {
+            .desktop-controls {
+                display: none;
+            }
+        }
+        
+        /* Hide mobile controls on desktop */
+        @media (min-width: 768px) {
+            .mobile-controls {
+                display: none;
+            }
+        }
+        
         /* Piece colors with glow effects */
         .cyan { color: #00ffff; background: rgba(0, 255, 255, 0.3); }
         .orange { color: #ff6600; background: rgba(255, 102, 0, 0.3); }
@@ -385,7 +547,68 @@
             <!-- Grid cells will be generated here -->
         </div>
         
-
+        <!-- Game menu overlay -->
+        <div class="game-overlay active" id="menuOverlay">
+            <h1 class="overlay-title menu-title">Tetris Turbo</h1>
+            <p class="overlay-subtitle">Mobile Edition</p>
+            
+            <div class="controls-container">
+                <!-- Mobile controls -->
+                <div class="control-section mobile-controls">
+                    <div class="control-title">Touch Controls</div>
+                    <div class="control-item">
+                        <span class="control-key">Tap Grid</span> → Rotate piece
+                    </div>
+                    <div class="control-item">
+                        <span class="control-key">Left/Right Zones</span> → Move piece
+                    </div>
+                    <div class="control-item">
+                        <span class="control-key">Swipe Down</span> → Soft drop
+                    </div>
+                    <div class="control-item">
+                        <span class="control-key">Long Press</span> → Hard drop
+                    </div>
+                    <div class="control-item">
+                        <span class="control-key">Tap Score</span> → Pause/Resume
+                    </div>
+                </div>
+                
+                <!-- Desktop controls -->
+                <div class="control-section desktop-controls">
+                    <div class="control-title">Keyboard Controls</div>
+                    <div class="control-item">
+                        <span class="control-key">← →</span> or <span class="control-key">A D</span> → Move
+                    </div>
+                    <div class="control-item">
+                        <span class="control-key">↑</span> or <span class="control-key">W</span> → Rotate
+                    </div>
+                    <div class="control-item">
+                        <span class="control-key">↓</span> or <span class="control-key">S</span> → Soft drop
+                    </div>
+                    <div class="control-item">
+                        <span class="control-key">SPACE</span> → Hard drop
+                    </div>
+                    <div class="control-item">
+                        <span class="control-key">P</span> → Pause &nbsp;&nbsp; <span class="control-key">R</span> → Restart
+                    </div>
+                </div>
+            </div>
+            
+            <button class="start-button" id="startButton">Start Game</button>
+        </div>
+        
+        <!-- Pause overlay -->
+        <div class="game-overlay" id="pauseOverlay">
+            <h1 class="overlay-title pause-title">Paused</h1>
+            <p class="overlay-text">Press P or tap score to resume</p>
+        </div>
+        
+        <!-- Game over overlay -->
+        <div class="game-overlay" id="gameOverOverlay">
+            <h1 class="overlay-title gameover-title">Game Over</h1>
+            <p class="overlay-text" id="finalScore">Final Score: 0</p>
+            <button class="start-button" id="restartButton">Play Again</button>
+        </div>
         
         <!-- Desktop info panel (hidden on mobile) -->
         <div class="game-info">
@@ -1192,7 +1415,10 @@
                 gameLoop = null;
             }
             console.log('Game Over! Final Score:', score);
-            // TODO: Add game over screen
+            
+            // Show game over overlay
+            document.getElementById('finalScore').textContent = `Final Score: ${score}`;
+            document.getElementById('gameOverOverlay').classList.add('active');
         }
         
         // Start new game
@@ -1249,11 +1475,15 @@
         function handleKeyDown(event) {
             if (!gameRunning) {
                 if (event.key === 'r' || event.key === 'R') {
+                    // Hide overlays and start new game
+                    document.getElementById('gameOverOverlay').classList.remove('active');
+                    document.getElementById('pauseOverlay').classList.remove('active');
                     startGame();
                 } else if (event.key === 'p' || event.key === 'P') {
                     // Allow unpause when game is paused
                     event.preventDefault();
                     gameRunning = true;
+                    document.getElementById('pauseOverlay').classList.remove('active');
                     gameLoop = requestAnimationFrame(gameUpdate);
                     console.log('Game unpaused');
                 }
@@ -1299,8 +1529,10 @@
                     event.preventDefault();
                     gameRunning = !gameRunning;
                     if (gameRunning) {
+                        document.getElementById('pauseOverlay').classList.remove('active');
                         gameLoop = requestAnimationFrame(gameUpdate);
                     } else if (gameLoop) {
+                        document.getElementById('pauseOverlay').classList.add('active');
                         cancelAnimationFrame(gameLoop);
                         gameLoop = null;
                     }
@@ -1539,8 +1771,10 @@
                 // Toggle pause state
                 gameRunning = !gameRunning;
                 if (gameRunning) {
+                    document.getElementById('pauseOverlay').classList.remove('active');
                     gameLoop = requestAnimationFrame(gameUpdate);
                 } else if (gameLoop) {
+                    document.getElementById('pauseOverlay').classList.add('active');
                     cancelAnimationFrame(gameLoop);
                     gameLoop = null;
                 }
@@ -1621,10 +1855,30 @@
             setupMobileControls();
             console.log('Game initialized successfully');
             
-            // Start the game automatically
-            setTimeout(() => {
-                startGame();
-            }, 1000);
+            // Don't start automatically - wait for user to press start button
+            // setTimeout(() => {
+            //     startGame();
+            // }, 1000);
+        });
+        
+        // Add start button functionality
+        document.getElementById('startButton').addEventListener('click', function() {
+            // Hide menu overlay
+            document.getElementById('menuOverlay').classList.remove('active');
+            
+            // Start the game
+            startGame();
+            console.log('Game started from menu');
+        });
+        
+        // Add restart button functionality
+        document.getElementById('restartButton').addEventListener('click', function() {
+            // Hide game over overlay
+            document.getElementById('gameOverOverlay').classList.remove('active');
+            
+            // Start new game
+            startGame();
+            console.log('Game restarted');
         });
         
         // Keyboard event listener (desktop)
