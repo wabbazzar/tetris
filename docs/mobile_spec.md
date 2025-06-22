@@ -24,11 +24,21 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
   - Continuous movement while finger held down
   - Smooth acceleration curve
   - Visual downward movement feedback
-- **Left Zone Tap**: Move piece left
+- **Swipe Left**: Move piece left
+  - Horizontal swipe left gesture anywhere on game board
+  - Quick swipe motion (minimum 30px distance)
+  - Immediate leftward movement with visual feedback
+  - Works alongside left zone tapping
+- **Swipe Right**: Move piece right
+  - Horizontal swipe right gesture anywhere on game board
+  - Quick swipe motion (minimum 30px distance)
+  - Immediate rightward movement with visual feedback
+  - Works alongside right zone tapping
+- **Left Zone Tap**: Move piece left (Alternative Method)
   - Tap anywhere to the left of the game board
   - Immediate leftward movement
   - Visual feedback in left zone
-- **Right Zone Tap**: Move piece right
+- **Right Zone Tap**: Move piece right (Alternative Method)
   - Tap anywhere to the right of the game board  
   - Immediate rightward movement
   - Visual feedback in right zone
@@ -47,9 +57,10 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
 
 #### Touch Zone Layout
 - **Game Board Zone**: Central rectangle containing the 10x20 grid
-  - Primary interaction area for rotation, slide down, and long press hard drop
+  - Primary interaction area for rotation, slide down, swipe left/right, and long press hard drop
   - Visual grid boundaries clearly defined
   - Tap feedback with subtle glow effect
+  - Swipe gesture recognition for horizontal movement
 - **Left Movement Zone**: Area to the left of game board
   - Extends from screen edge to game board left border
   - Visual indicator when tapped (left arrow effect)
@@ -98,7 +109,8 @@ Adapt the existing Tetris Turbo game for mobile-first design, specifically optim
 #### Visual Feedback System
 - **Touch Indicators**: 
   - Subtle glow effect where finger touches
-  - Gesture trail visualization
+  - Gesture trail visualization for swipes
+  - Directional swipe arrows for left/right movements
   - Button press animations
 - **Combo Animations**:
   - Double lines: Orange wave with double-pulse haptic

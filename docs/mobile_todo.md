@@ -96,16 +96,20 @@ clean-mobile:
 ### 2.1 Visual Tests First
 - [ ] Test touch zone detection accuracy (grid vs left/right zones)
 - [ ] Test tap vs double-tap recognition within grid
+- [x] Test swipe left/right gesture recognition within grid
 - [ ] Test left/right zone tap responsiveness
 - [ ] Test long press (500ms) recognition anywhere on screen
 - [ ] Verify touch zone visual feedback indicators
+- [x] Test swipe gesture visual feedback and trail effects
 
 ### 2.2 Core Touch Zone Handler
 - [ ] Create single handleTouchZones() method for all zone-based touch events
 - [ ] Implement zone detection algorithms (grid, left, right, bottom)
 - [ ] Add touch coordinate tracking and zone mapping
 - [ ] Create debounced tap processing with double-tap detection
-- [ ] Add visual feedback system for each touch zone
+- [x] Add swipe gesture recognition with directional detection
+- [x] Implement swipe threshold and velocity detection (minimum 30px distance)
+- [x] Add visual feedback system for each touch zone and swipe gestures
 
 ### 2.3 Simplified Control Implementation
 - [ ] **Grid Tap**: Implement piece rotation
@@ -117,12 +121,22 @@ clean-mobile:
   - Continuous movement while finger held down
   - Smooth acceleration curve
   - Visual downward movement feedback
-- [ ] **Left Zone Tap**: Implement left movement
+- [x] **Swipe Left**: Implement left movement via swipe
+  - Horizontal swipe left gesture anywhere on game board
+  - Minimum 30px distance and velocity threshold
+  - Immediate piece movement left with swipe trail visual
+  - Works alongside left zone tapping
+- [x] **Swipe Right**: Implement right movement via swipe
+  - Horizontal swipe right gesture anywhere on game board
+  - Minimum 30px distance and velocity threshold
+  - Immediate piece movement right with swipe trail visual
+  - Works alongside right zone tapping
+- [ ] **Left Zone Tap**: Implement left movement (alternative method)
   - Detect taps in area left of game board
   - Immediate piece movement left
   - Visual left arrow feedback in zone
   - Comfortable thumb-reachable area sizing
-- [ ] **Right Zone Tap**: Implement right movement
+- [ ] **Right Zone Tap**: Implement right movement (alternative method)
   - Detect taps in area right of game board
   - Immediate piece movement right
   - Visual right arrow feedback in zone
@@ -142,6 +156,8 @@ clean-mobile:
 - [ ] Implement visual arrow indicators for left/right zones
 - [ ] Add grid tap glow effect for rotation feedback
 - [ ] Create double-tap trail effect for hard drop
+- [x] Add swipe gesture trail effects (left/right directional arrows)
+- [x] Add swipe velocity-based visual feedback intensity
 - [ ] Add bottom zone long press feedback (double down arrows ⬇⬇)
 - [ ] Add zone highlighting on touch (temporary visual feedback)
 
